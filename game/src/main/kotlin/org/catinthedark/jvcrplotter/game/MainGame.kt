@@ -64,6 +64,7 @@ class MainGame : Game() {
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
+        Gdx.gl.glLineWidth(4f)
 
         shapeRenderer.projectionMatrix = stage.batch.projectionMatrix
 

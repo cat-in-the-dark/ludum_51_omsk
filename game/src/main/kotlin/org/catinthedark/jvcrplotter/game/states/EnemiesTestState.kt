@@ -1,5 +1,6 @@
 package org.catinthedark.jvcrplotter.game.states
 
+import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.entities.EnemiesController
 import org.catinthedark.jvcrplotter.game.entities.EnemyGenerator
 import org.catinthedark.jvcrplotter.lib.IOC
@@ -12,7 +13,10 @@ class EnemiesTestState : IState {
     override fun onActivate() {
         controller = EnemiesController()
         IOC.put("enemiesController", controller)
-        generators.add(EnemyGenerator(50f, 50f, 300f, 300f))
+        generators.add(EnemyGenerator(Const.Balance.generatorPlaces[0]))
+        generators.add(EnemyGenerator(Const.Balance.generatorPlaces[1]))
+        generators.add(EnemyGenerator(Const.Balance.generatorPlaces[2]))
+        generators.add(EnemyGenerator(Const.Balance.generatorPlaces[3]))
     }
 
     override fun onUpdate() {
