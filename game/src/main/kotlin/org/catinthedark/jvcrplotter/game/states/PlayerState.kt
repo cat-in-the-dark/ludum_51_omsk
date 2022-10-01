@@ -10,10 +10,7 @@ import org.catinthedark.jvcrplotter.game.control.PlayerController
 import org.catinthedark.jvcrplotter.game.control.PlayerControllerArrowKeys
 import org.catinthedark.jvcrplotter.game.control.PlayerControllerGamepad
 import org.catinthedark.jvcrplotter.game.control.PlayerControllerWasd
-import org.catinthedark.jvcrplotter.game.entities.Bullet
-import org.catinthedark.jvcrplotter.game.entities.EnemiesController
-import org.catinthedark.jvcrplotter.game.entities.EnemyGenerator
-import org.catinthedark.jvcrplotter.game.entities.Player
+import org.catinthedark.jvcrplotter.game.entities.*
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.RepeatBarrier
 import org.catinthedark.jvcrplotter.lib.atOrPut
@@ -31,16 +28,17 @@ class PlayerState : IState {
         Pair(PlayerControllerArrowKeys(), false)
     )
 
-    private val enemiesController by lazy { IOC.atOrPut("enemiesController", EnemiesController()) }
+    private val enemiesController = IOC.atOrPut("enemiesController", EnemiesController())
     private val enemyGenerators = listOf(
         EnemyGenerator(Const.Balance.generatorPlaces[0]),
         EnemyGenerator(Const.Balance.generatorPlaces[1]),
         EnemyGenerator(Const.Balance.generatorPlaces[2]),
         EnemyGenerator(Const.Balance.generatorPlaces[3]),
     )
-    private val bullets = mutableListOf<Bullet>()
-    private val players: MutableList<Player> by lazy { IOC.atOrPut("players", mutableListOf()) }
+    private val bullets: MutableList<Bullet> = IOC.atOrPut("bullets", mutableListOf())
+    private val players: MutableList<Player> = IOC.atOrPut("players", mutableListOf())
     private val gamepads: Array<Controller>? = Controllers.getControllers()
+    private val collisionsSystem = CollisionsSystem()
 
     private val cooldown = RepeatBarrier(0.5f)
     private fun spawnBullets() {
@@ -74,6 +72,8 @@ class PlayerState : IState {
                 }
             }
         }
+
+        collisionsSystem.update()
 
         players.forEach {
             it.update()

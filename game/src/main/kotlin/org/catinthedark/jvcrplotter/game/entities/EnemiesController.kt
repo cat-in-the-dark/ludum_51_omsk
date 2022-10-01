@@ -7,7 +7,7 @@ import org.catinthedark.jvcrplotter.lib.atOrPut
 import org.catinthedark.jvcrplotter.lib.math.findClosest
 
 class EnemiesController {
-    private val enemies: MutableList<SimpleEnemy> by lazy { IOC.atOrPut("enemies", mutableListOf()) }
+    private val enemies: MutableList<SimpleEnemy> = IOC.atOrPut("enemies", mutableListOf())
     private val players: List<Player> by lazy { IOC.atOrFail("players") }
 
     fun registerEnemy(enemy: SimpleEnemy) {
