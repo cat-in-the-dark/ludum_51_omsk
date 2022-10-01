@@ -11,7 +11,7 @@ object Const {
     }
 
     object Balance {
-
+        const val ENEMY_SPAWN_TIMEOUT = 2f
     }
 
     object UI {
