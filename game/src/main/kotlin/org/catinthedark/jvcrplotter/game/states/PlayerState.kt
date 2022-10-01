@@ -10,9 +10,13 @@ import org.catinthedark.jvcrplotter.game.control.PlayerController
 import org.catinthedark.jvcrplotter.game.control.PlayerControllerArrowKeys
 import org.catinthedark.jvcrplotter.game.control.PlayerControllerGamepad
 import org.catinthedark.jvcrplotter.game.control.PlayerControllerWasd
+import org.catinthedark.jvcrplotter.game.entities.Bullet
+import org.catinthedark.jvcrplotter.game.entities.EnemiesController
+import org.catinthedark.jvcrplotter.game.entities.EnemyGenerator
 import org.catinthedark.jvcrplotter.game.entities.Player
 import org.catinthedark.jvcrplotter.lib.IOC
-import org.catinthedark.jvcrplotter.lib.atOr
+import org.catinthedark.jvcrplotter.lib.RepeatBarrier
+import org.catinthedark.jvcrplotter.lib.math.randomDir
 import org.catinthedark.jvcrplotter.lib.states.IState
 import org.slf4j.LoggerFactory
 
@@ -26,8 +30,32 @@ class PlayerState : IState {
         Pair(PlayerControllerArrowKeys(), false)
     )
 
-    private val players: MutableList<Player> by lazy { IOC.atOr("players", mutableListOf()) }
+    private val enemiesController = EnemiesController()
+    private val enemyGenerators = listOf(
+        EnemyGenerator(Const.Balance.generatorPlaces[0]),
+        EnemyGenerator(Const.Balance.generatorPlaces[1]),
+        EnemyGenerator(Const.Balance.generatorPlaces[2]),
+        EnemyGenerator(Const.Balance.generatorPlaces[3]),
+    )
+    private val bullets = mutableListOf<Bullet>()
+    private val players: MutableList<Player> = mutableListOf()
     private val gamepads: Array<Controller>? = Controllers.getControllers()
+
+    init {
+        IOC.put("players", players)
+        IOC.put("enemiesController", enemiesController)
+    }
+
+    private val cooldown = RepeatBarrier(0.5f)
+    private fun spawnBullets() {
+        cooldown.invoke {
+            players.forEach { player ->
+                // TODO: find closest enemy
+                val dir = randomDir()
+                bullets.add(Bullet(player.pos.cpy(), dir))
+            }
+        }
+    }
 
     override fun onActivate() {
         logger.info("here!")
@@ -54,6 +82,11 @@ class PlayerState : IState {
         players.forEach {
             it.update()
         }
+
+        enemiesController.update()
+        spawnBullets()
+        bullets.forEach { it.update() }
+        enemyGenerators.forEach { it.update() } // TODO: update only for online players
     }
 
     override fun onExit() {

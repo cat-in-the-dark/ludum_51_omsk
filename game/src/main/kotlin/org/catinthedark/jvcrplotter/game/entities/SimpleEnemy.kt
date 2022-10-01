@@ -17,13 +17,15 @@ class SimpleEnemy(
 ) : ITransform {
     private var target: ITransform? = null
     private val renderer: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
+    private val initialDir = randomDir()
+
 
     fun follow(target: ITransform) {
         this.target = target
     }
 
     private fun dirTo(t: ITransform?): Vector2 {
-        if (t == null) return randomDir()
+        if (t == null) return initialDir
         return t.pos.cpy().sub(pos).nor()
     }
 
