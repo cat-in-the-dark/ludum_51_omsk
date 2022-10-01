@@ -16,6 +16,7 @@ import org.catinthedark.jvcrplotter.game.entities.EnemyGenerator
 import org.catinthedark.jvcrplotter.game.entities.Player
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.RepeatBarrier
+import org.catinthedark.jvcrplotter.lib.atOrPut
 import org.catinthedark.jvcrplotter.lib.math.randomDir
 import org.catinthedark.jvcrplotter.lib.states.IState
 import org.slf4j.LoggerFactory
@@ -30,7 +31,7 @@ class PlayerState : IState {
         Pair(PlayerControllerArrowKeys(), false)
     )
 
-    private val enemiesController = EnemiesController()
+    private val enemiesController by lazy { IOC.atOrPut("enemiesController", EnemiesController()) }
     private val enemyGenerators = listOf(
         EnemyGenerator(Const.Balance.generatorPlaces[0]),
         EnemyGenerator(Const.Balance.generatorPlaces[1]),
@@ -38,13 +39,8 @@ class PlayerState : IState {
         EnemyGenerator(Const.Balance.generatorPlaces[3]),
     )
     private val bullets = mutableListOf<Bullet>()
-    private val players: MutableList<Player> = mutableListOf()
+    private val players: MutableList<Player> by lazy { IOC.atOrPut("players", mutableListOf()) }
     private val gamepads: Array<Controller>? = Controllers.getControllers()
-
-    init {
-        IOC.put("players", players)
-        IOC.put("enemiesController", enemiesController)
-    }
 
     private val cooldown = RepeatBarrier(0.5f)
     private fun spawnBullets() {

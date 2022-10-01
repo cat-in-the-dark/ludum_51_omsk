@@ -49,6 +49,19 @@ inline fun <reified T> IOC.atOr(name: String, default: T): T {
     }
 }
 
+inline fun <reified T> IOC.atOrPut(name: String, default: T): T {
+    val obj = get(name)
+    if (obj == null) {
+        put(name, default)
+        return default
+    }
+    if (obj is T?) {
+        return obj
+    } else {
+        throw ClassCastException("Object for $name is not a ${T::class.java.name}")
+    }
+}
+
 inline fun <reified T> IOC.update(name: String, func: (T?) -> Any?) {
     put(name, func(at(name)))
 }
