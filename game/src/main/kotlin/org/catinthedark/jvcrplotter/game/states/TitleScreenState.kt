@@ -39,6 +39,9 @@ class TitleScreenState : IState {
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             IOC.put("state", States.TEST_AUDIO_SCREEN)
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.P)) {
+            IOC.put("state", States.PLAYER_SCREEN)
+        }
     }
 
     override fun onExit() {
