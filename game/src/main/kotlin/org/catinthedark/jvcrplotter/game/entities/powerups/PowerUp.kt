@@ -5,7 +5,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.game.entities.Player
-import org.catinthedark.jvcrplotter.lib.*
+import org.catinthedark.jvcrplotter.lib.ICollisionRect
+import org.catinthedark.jvcrplotter.lib.IOC
+import org.catinthedark.jvcrplotter.lib.atOrFail
+import org.catinthedark.jvcrplotter.lib.interfaces.ITransform
+import org.catinthedark.jvcrplotter.lib.managed
 
 abstract class PowerUp(override val pos: Vector2) : ITransform, ICollisionRect {
     private val renderer: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }

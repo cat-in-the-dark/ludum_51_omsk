@@ -4,25 +4,33 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import org.catinthedark.jvcrplotter.lib.IOC
-import org.catinthedark.jvcrplotter.lib.ITransform
-import org.catinthedark.jvcrplotter.lib.atOrFail
-import org.catinthedark.jvcrplotter.lib.managed
+import org.catinthedark.jvcrplotter.lib.*
+import org.catinthedark.jvcrplotter.lib.interfaces.IDestructible
+import org.catinthedark.jvcrplotter.lib.interfaces.ITransform
+import org.catinthedark.jvcrplotter.lib.interfaces.IUpdatable
 
 class Bullet(
     override val pos: Vector2,
     private val dir: Vector2,
     private val speed: Vector2 = Vector2(350f, 350f)
-) : ITransform {
+) : ITransform, IUpdatable, IDestructible {
+    override var shouldDestroy = false
     private val size = 25f
     private val renderer: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
+    val posEnd: Vector2
+        get() = Vector2(pos.x + dir.x * size, pos.y + dir.y * size)
 
-    fun update() {
+    override fun update() {
         pos.mulAdd(dir, speed.cpy().scl(Gdx.graphics.deltaTime))
 
         renderer.managed(ShapeRenderer.ShapeType.Line) {
             it.color = Color.RED
-            it.line(pos.x, pos.y, pos.x + dir.x * size, pos.y + dir.y * size)
+            it.line(pos, posEnd)
         }
+    }
+
+    fun damage(enemy: SimpleEnemy) {
+        // TODO: check if bullet should be destroyed
+        shouldDestroy = true
     }
 }

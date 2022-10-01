@@ -7,7 +7,11 @@ import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.control.PlayerController
-import org.catinthedark.jvcrplotter.lib.*
+import org.catinthedark.jvcrplotter.lib.ICollisionRect
+import org.catinthedark.jvcrplotter.lib.IOC
+import org.catinthedark.jvcrplotter.lib.atOrFail
+import org.catinthedark.jvcrplotter.lib.interfaces.ITransform
+import org.catinthedark.jvcrplotter.lib.managed
 
 data class Stats(var bulletsCount: Int)
 

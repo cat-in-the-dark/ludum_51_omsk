@@ -40,6 +40,7 @@ class PlayerState : IState {
     private val players: MutableList<Player> = IOC.atOrPut("players", mutableListOf())
     private val gamepads: Array<Controller>? = Controllers.getControllers()
     private val collisionsSystem = CollisionsSystem()
+    private val garbageCollectorSystem = GarbageCollectorSystem()
 
     private val powerUpsGenerator = PowerUpsGenerator()
 
@@ -85,6 +86,7 @@ class PlayerState : IState {
         }
 
         collisionsSystem.update()
+        garbageCollectorSystem.update()
 
         players.forEach {
             it.update()

@@ -1,7 +1,7 @@
 package org.catinthedark.jvcrplotter.lib.math
 
 import com.badlogic.gdx.math.Vector2
-import org.catinthedark.jvcrplotter.lib.ITransform
+import org.catinthedark.jvcrplotter.lib.interfaces.ITransform
 import kotlin.math.sqrt
 import kotlin.random.Random
 
