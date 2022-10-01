@@ -10,7 +10,7 @@ object Assets {
         return AssetManager().apply {
             Names.textures.forEach { load(it, Texture::class.java) }
             Sounds.values().forEach(::load)
-            Musics.values().forEach(::load)
+            Music.values().forEach(::load)
         }
     }
 
@@ -25,11 +25,15 @@ object Assets {
     }
 
     enum class Sounds(val path: String) {
-        POWERUP("sounds/powerup.wav")
+        POWERUP("sounds/powerup.wav"),
     }
 
-    enum class Musics(val path: String) {
-        MAIN_BG_LOOP("music/main-bg-loop.ogg")
+    enum class Music(val path: String) {
+        KICK02("music/3_kick02.ogg"),
+        SNARE06("music/4_snare06.ogg"),
+        SNARE02("music/5_snare02.ogg"),
+        LO_TRASH("music/2_lo-trash.ogg"),
+        HI_TRASH("music/1_hi-trash.ogg"),
     }
 }
 
@@ -40,5 +44,5 @@ inline fun <reified T> AssetManager.at(name: String): T {
 fun AssetManager.load(sound: Assets.Sounds) = load(sound.path, Sound::class.java)
 fun AssetManager.at(sound: Assets.Sounds): Sound = get(sound.path, Sound::class.java)
 
-fun AssetManager.load(sound: Assets.Musics) = load(sound.path, Music::class.java)
-fun AssetManager.at(sound: Assets.Musics): Music = get(sound.path, Music::class.java)
+fun AssetManager.load(sound: Assets.Music) = load(sound.path, Music::class.java)
+fun AssetManager.at(sound: Assets.Music): Music = get(sound.path, Music::class.java)

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Stage
+import org.catinthedark.jvcrplotter.audio.Bgm
 import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.States
 import org.catinthedark.jvcrplotter.game.at
@@ -17,6 +18,7 @@ import org.catinthedark.jvcrplotter.lib.states.IState
 class TitleScreenState : IState {
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
     private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
+    private val bgm: Bgm by lazy { IOC.atOrFail("bgm") }
 
     private var currentTime = 0f
 
@@ -26,6 +28,7 @@ class TitleScreenState : IState {
     }
 
     override fun onUpdate() {
+        bgm.update()
         hud.batch.managed { b ->
             b.draw(am.texture(Assets.Names.TITLE), 0f, 0f)
         }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
+import org.catinthedark.jvcrplotter.audio.Bgm
 import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.States
 import org.catinthedark.jvcrplotter.lib.IOC
@@ -16,6 +17,7 @@ class SplashScreenState : IState {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
     private val am: AssetManager by lazy { Assets.load() }
+    private val bgm: Bgm by lazy { Bgm(am) }
     private var time = 0f
 
     override fun onActivate() {
@@ -27,6 +29,7 @@ class SplashScreenState : IState {
         if (am.update()) {
             IOC.put("state", States.TITLE_SCREEN)
             IOC.put("assetManager", am)
+            IOC.put("bgm", bgm)
             logger.info("Assets loaded in $time")
         } else {
             logger.info("Loading assets...${am.progress}")
