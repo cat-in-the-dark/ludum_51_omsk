@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FitViewport
-import org.catinthedark.jvcrplotter.game.states.PlayerState
-import org.catinthedark.jvcrplotter.game.states.SplashScreenState
-import org.catinthedark.jvcrplotter.game.states.TestAudioState
-import org.catinthedark.jvcrplotter.game.states.TitleScreenState
+import org.catinthedark.jvcrplotter.game.states.*
 import org.catinthedark.jvcrplotter.lib.Deffer
 import org.catinthedark.jvcrplotter.lib.DefferImpl
 import org.catinthedark.jvcrplotter.lib.IOC
@@ -43,6 +40,7 @@ class MainGame : Game() {
                 States.PLAYER_SCREEN to PlayerState(),
                 States.TITLE_SCREEN to TitleScreenState(),
                 States.TEST_AUDIO_SCREEN to TestAudioState(),
+                States.ENEMIES_SCREEN to EnemiesTestState(),
             )
         }
     }
