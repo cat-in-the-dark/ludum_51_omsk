@@ -2,6 +2,7 @@ package org.catinthedark.jvcrplotter.game
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -42,6 +43,17 @@ class MainGame : Game() {
                 States.TEST_AUDIO_SCREEN to TestAudioState(),
                 States.ENEMIES_SCREEN to EnemiesTestState(),
             )
+            putMixin(States.TITLE_SCREEN) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    IOC.put("state", States.SPLASH_SCREEN)
+                }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+                    IOC.put("state", States.TEST_AUDIO_SCREEN)
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.P)) {
+                    IOC.put("state", States.PLAYER_SCREEN)
+                }
+            }
         }
     }
     private val shapeRenderer: ShapeRenderer by lazy {
