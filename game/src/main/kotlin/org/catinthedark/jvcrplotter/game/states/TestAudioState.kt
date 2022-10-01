@@ -11,13 +11,18 @@ import org.catinthedark.jvcrplotter.lib.managed
 import org.catinthedark.jvcrplotter.lib.states.IState
 
 class TestAudioState : IState {
-    private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
-    private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
+    private val hud: Stage by lazy { IOC.atOrFail("hud") }
+    private val am: AssetManager by lazy { IOC.atOrFail("assetManager") }
 
     private var currentTime = 0f
 
     override fun onActivate() {
         currentTime = 0f
+
+        am.at(Assets.Musics.MAIN_BG_LOOP).apply {
+            isLooping = true
+            play()
+        }
     }
 
     override fun onUpdate() {
@@ -35,5 +40,6 @@ class TestAudioState : IState {
     }
 
     override fun onExit() {
+        am.at(Assets.Musics.MAIN_BG_LOOP).stop()
     }
 }
