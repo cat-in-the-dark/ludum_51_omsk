@@ -5,8 +5,10 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FitViewport
+import org.catinthedark.jvcrplotter.game.states.PlayerState
 import org.catinthedark.jvcrplotter.game.states.SplashScreenState
 import org.catinthedark.jvcrplotter.game.states.TestAudioState
 import org.catinthedark.jvcrplotter.game.states.TitleScreenState
@@ -38,9 +40,16 @@ class MainGame : Game() {
         StateMachine().apply {
             putAll(
                 States.SPLASH_SCREEN to SplashScreenState(),
+                States.PLAYER_SCREEN to PlayerState(),
                 States.TITLE_SCREEN to TitleScreenState(),
                 States.TEST_AUDIO_SCREEN to TestAudioState(),
             )
+        }
+    }
+    private val shapeRenderer: ShapeRenderer by lazy {
+        ShapeRenderer().apply {
+            transformMatrix.scale(1.0f, -1.0f, 1.0f)
+            transformMatrix.translate(0.0f, -Const.Screen.HEIGHT.toFloat(), 0.0f)
         }
     }
 
@@ -48,6 +57,7 @@ class MainGame : Game() {
         IOC.put("deffer", DefferImpl())
         IOC.put("stage", stage)
         IOC.put("hud", hud)
+        IOC.put("shapeRenderer", shapeRenderer)
         IOC.put("state", States.SPLASH_SCREEN)
     }
 
@@ -56,6 +66,8 @@ class MainGame : Game() {
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
+
+        shapeRenderer.projectionMatrix = stage.batch.projectionMatrix
 
         stage.viewport.apply()
         stage.act(Gdx.graphics.deltaTime)
