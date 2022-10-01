@@ -7,17 +7,15 @@ import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.control.PlayerController
 import org.catinthedark.jvcrplotter.lib.IOC
+import org.catinthedark.jvcrplotter.lib.ITransform
 import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.managed
-import org.slf4j.LoggerFactory
 
 class Player(
-    var pos: Vector2,
+    override val pos: Vector2,
     private val color: Color,
     private val controller: PlayerController
-) {
-    private val logger = LoggerFactory.getLogger(javaClass)
-
+) : ITransform {
     private val render: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
 
     private var speed = Vector2(0f, 0f)

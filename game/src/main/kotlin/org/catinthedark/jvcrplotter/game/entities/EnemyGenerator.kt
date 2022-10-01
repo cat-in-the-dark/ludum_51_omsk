@@ -31,7 +31,6 @@ class EnemyGenerator(
         repeater.invoke {
             val s = (MathUtils.sin(time / SIN_TIME_SCALE) + 1) / 2f // 0..1
             val count = MathUtils.round(MAX_SPAWN * s)
-            logger.info("Spawn Enemies $count, sin = $s, time= $time")
             for (i in 0..count) {
                 val x = bounds.x + Random.nextFloat() * bounds.width
                 val y = bounds.y + Random.nextFloat() * bounds.height

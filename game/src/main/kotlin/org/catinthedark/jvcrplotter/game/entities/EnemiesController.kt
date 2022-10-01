@@ -1,24 +1,15 @@
 package org.catinthedark.jvcrplotter.game.entities
 
-import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.atOrFail
+import org.catinthedark.jvcrplotter.lib.math.findClosest
 
 class EnemiesController {
     private val enemies: MutableList<SimpleEnemy> = mutableListOf()
     private val players: List<Player> = IOC.atOrFail("players")
 
-    private fun findTarget(from: Vector2): Vector2? {
-        var minDist = Float.MAX_VALUE
-        var target: Vector2? = null
-        players.forEach {
-            val dst = it.pos.dst2(from)
-            if (dst < minDist) {
-                minDist = dst
-                target = it.pos
-            }
-        }
-        return target
+    init {
+        IOC.put("enemies", enemies)
     }
 
     fun registerEnemy(enemy: SimpleEnemy) {
@@ -28,7 +19,7 @@ class EnemiesController {
     fun update() {
         // TODO: get attractor
         enemies.forEach {
-            findTarget(it.pos)?.apply {
+            findClosest(it, players)?.apply {
                 it.follow(this)
             }
             it.update()
