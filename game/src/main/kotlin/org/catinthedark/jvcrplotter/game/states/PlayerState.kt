@@ -32,6 +32,7 @@ class PlayerState : IState {
     override fun onActivate() {
         logger.info("here!")
         gamepads?.forEach {
+            logger.info("Gamepad: ${it.name} ${it.uniqueId}")
             if (controllers.size >= Const.Balance.MAX_PLAYERS) {
                 return@forEach
             }
