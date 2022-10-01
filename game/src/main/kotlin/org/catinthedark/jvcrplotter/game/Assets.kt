@@ -1,19 +1,14 @@
 package org.catinthedark.jvcrplotter.game
 
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
-import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.DEFAULT_CHARS
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
-import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 
 object Assets {
     fun load(): AssetManager {
         return AssetManager().apply {
             Names.textures.forEach { load(it, Texture::class.java) }
+            Sounds.values().forEach(::load)
         }
     }
 
@@ -26,8 +21,16 @@ object Assets {
             TITLE,
         )
     }
+
+    enum class Sounds(val path: String) {
+        POWERUP("sounds/powerup.wav")
+    }
 }
 
 inline fun <reified T> AssetManager.at(name: String): T {
     return get(name, T::class.java)
 }
+
+fun AssetManager.load(sound: Assets.Sounds): Unit = load(sound.path, Sound::class.java)
+fun AssetManager.at(sound: Assets.Sounds): Sound = get(sound.path, Sound::class.java)
+fun AssetManager.isLoaded(sound: Assets.Sounds): Boolean = isLoaded(sound.path, Sound::class.java)
