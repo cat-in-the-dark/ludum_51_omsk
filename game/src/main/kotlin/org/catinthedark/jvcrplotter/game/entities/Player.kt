@@ -3,22 +3,22 @@ package org.catinthedark.jvcrplotter.game.entities
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.control.PlayerController
-import org.catinthedark.jvcrplotter.lib.IOC
-import org.catinthedark.jvcrplotter.lib.ITransform
-import org.catinthedark.jvcrplotter.lib.atOrFail
-import org.catinthedark.jvcrplotter.lib.managed
+import org.catinthedark.jvcrplotter.lib.*
+
+data class Stats(var bulletsCount: Int)
 
 class Player(
     override val pos: Vector2,
     private val color: Color,
     private val controller: PlayerController
-) : ITransform {
+) : ITransform, ICollisionRect {
     private val render: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
 
-    private var speed = Vector2(0f, 0f)
+    public val stats = Stats(bulletsCount = 1)
 
     private val playerHeight = 32f
     private val playerWidth = 24f
@@ -35,11 +35,11 @@ class Player(
         render.managed(ShapeRenderer.ShapeType.Filled) {
             it.color = color
             it.triangle(
-                pos.x,
-                pos.y,
-                pos.x - playerWidth / 2,
-                pos.y + playerHeight,
                 pos.x + playerWidth / 2,
+                pos.y,
+                pos.x,
+                pos.y + playerHeight,
+                pos.x + playerWidth,
                 pos.y + playerHeight
             )
         }
@@ -48,5 +48,9 @@ class Player(
     fun update() {
         updatePos()
         draw()
+    }
+
+    override fun getCollisionRect(): Rectangle {
+        return Rectangle(pos.x, pos.y, playerWidth, playerHeight)
     }
 }

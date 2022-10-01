@@ -27,6 +27,10 @@ object Const {
             const val SIN_TIME_SCALE = 2f
             const val MAX_SPAWN = 6f
         }
+
+        object PowerUp {
+            const val TIMEOUT = 10f
+        }
     }
 
     object UI {

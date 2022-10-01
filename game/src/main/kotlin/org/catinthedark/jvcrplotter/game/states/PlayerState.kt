@@ -29,6 +29,7 @@ class PlayerState : IState {
     )
 
     private val enemiesController = IOC.atOrPut("enemiesController", EnemiesController())
+    private val powerUpsController = PowerUpsController()
     private val enemyGenerators = listOf(
         EnemyGenerator(Const.Balance.generatorPlaces[0]),
         EnemyGenerator(Const.Balance.generatorPlaces[1]),
@@ -40,13 +41,23 @@ class PlayerState : IState {
     private val gamepads: Array<Controller>? = Controllers.getControllers()
     private val collisionsSystem = CollisionsSystem()
 
+    private val powerUpsGenerator = PowerUpsGenerator()
+
+    init {
+        IOC.put("players", players)
+        IOC.put("enemiesController", enemiesController)
+        IOC.put("powerUpsController", powerUpsController)
+    }
+
     private val cooldown = RepeatBarrier(0.5f)
     private fun spawnBullets() {
         cooldown.invoke {
             players.forEach { player ->
-                // TODO: find closest enemy
-                val dir = randomDir()
-                bullets.add(Bullet(player.pos.cpy(), dir))
+                for (i in 0 until player.stats.bulletsCount) {
+                    // TODO: find closest enemy
+                    val dir = randomDir()
+                    bullets.add(Bullet(player.pos.cpy(), dir))
+                }
             }
         }
     }
@@ -83,6 +94,8 @@ class PlayerState : IState {
         spawnBullets()
         bullets.forEach { it.update() }
         enemyGenerators.forEach { it.update() } // TODO: update only for online players
+        powerUpsGenerator.update()
+        powerUpsController.update()
     }
 
     override fun onExit() {
