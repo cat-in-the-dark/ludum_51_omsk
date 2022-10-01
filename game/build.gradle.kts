@@ -29,11 +29,13 @@ java {
 }
 
 val gdxVersion = "1.11.0"
+val gdxControllersVersion = "2.2.2"
 val slfVersion = "1.7.26"
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
+    implementation("com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion")
 
     implementation("com.badlogicgames.gdx:gdx-freetype:$gdxVersion")
 

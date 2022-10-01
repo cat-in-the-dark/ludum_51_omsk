@@ -11,9 +11,8 @@ object Const {
 
     object Balance {
         const val ENEMY_SPAWN_TIMEOUT = 2f
-        const val MAX_PLAYER_SPEED = 8f
-        const val PLAYER_ACC = 0.4f
-        const val PLAYER_FRICTION = 0.3f
+        const val MAX_PLAYER_SPEED = 300f
+        const val MAX_PLAYERS = 4
 
         val generatorPlaces = listOf(
             Rectangle(5f, 5f, 1270f, 64f),
