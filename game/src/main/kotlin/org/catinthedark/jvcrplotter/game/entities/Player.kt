@@ -10,7 +10,7 @@ import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.managed
 
 class Player(
-    private var pos: Vector2,
+    var pos: Vector2,
     private val color: Color,
     private val controller: PlayerController
 ) {

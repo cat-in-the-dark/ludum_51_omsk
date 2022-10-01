@@ -10,7 +10,7 @@ import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.managed
 
 class SimpleEnemy(
-    private var pos: Vector2,
+    var pos: Vector2,
     private val radius: Float,
     private var speed: Vector2 = Vector2(50f, 50f)
 ) {
