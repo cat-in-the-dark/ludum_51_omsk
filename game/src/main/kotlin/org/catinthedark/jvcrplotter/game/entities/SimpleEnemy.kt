@@ -51,7 +51,7 @@ class SimpleEnemy(
         pos.mulAdd(dir, speed.cpy().scl(Gdx.graphics.deltaTime))
 
         renderer.managed(ShapeRenderer.ShapeType.Line) {
-            it.color = Color.WHITE
+            it.color = if (!isBoss) Color.WHITE else Color.GOLD
             it.circle(pos.x, pos.y, radius)
         }
 
