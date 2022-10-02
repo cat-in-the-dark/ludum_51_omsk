@@ -26,13 +26,18 @@ object Assets {
 
     enum class Sounds(val path: String) {
         POWERUP("sounds/powerup.wav"),
-        SHOOT("sounds/shoot-01.wav"),
+        SHOOT_01("sounds/1_sh.wav"),
+        SHOOT_02("sounds/2_sh.wav"),
+        SHOOT_03("sounds/3_sh.wav"),
+        SHOOT_04("sounds/4_sh.wav"),
+        SHOOT_05("sounds/5_sh.wav"),
+        SHOOT_06("sounds/6_sh.wav"),
     }
 
     enum class Music(val path: String) {
-        KICK02("music/3_kick02.ogg"),
-        SNARE06("music/4_snare06.ogg"),
-        SNARE02("music/5_snare02.ogg"),
+//        KICK02("music/3_kick02.ogg"), // TODO убрать лишние файлы ассетов
+//        SNARE06("music/4_snare06.ogg"),
+//        SNARE02("music/5_snare02.ogg"),
         LO_TRASH("music/2_lo-trash.ogg"),
         HI_TRASH("music/1_hi-trash.ogg"),
     }

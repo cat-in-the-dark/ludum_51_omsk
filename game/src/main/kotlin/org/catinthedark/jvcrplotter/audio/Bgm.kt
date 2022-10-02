@@ -33,6 +33,25 @@ class Bgm(
     private val bulletSlots = HashMap<Int, Int>()
     private var lastSoundedSlot: Int? = null
 
+    private val slotToShoot = arrayOf(
+        Assets.Sounds.SHOOT_01,
+        Assets.Sounds.SHOOT_02,
+        Assets.Sounds.SHOOT_03,
+        Assets.Sounds.SHOOT_04,
+        Assets.Sounds.SHOOT_05,
+        Assets.Sounds.SHOOT_02,
+        Assets.Sounds.SHOOT_03,
+        Assets.Sounds.SHOOT_04,
+        Assets.Sounds.SHOOT_06,
+        Assets.Sounds.SHOOT_02,
+        Assets.Sounds.SHOOT_03,
+        Assets.Sounds.SHOOT_04,
+        Assets.Sounds.SHOOT_05,
+        Assets.Sounds.SHOOT_02,
+        Assets.Sounds.SHOOT_03,
+        Assets.Sounds.SHOOT_04,
+    )
+
     init {
         Assets.Music.values().forEach {
             volumeGains[it] = 0.0f
@@ -93,7 +112,7 @@ class Bgm(
         }
 
         if (lastSoundedSlot != currentSlot) {
-            am.at(Assets.Sounds.SHOOT).play()
+            am.at(slotToShoot[currentSlot]).play()
             lastSoundedSlot = currentSlot
         }
         bulletSlots[player] = shiftedCurrentSlot
@@ -107,7 +126,7 @@ class Bgm(
     }
 
     private fun getCurrentShootingSlot(): Int? {
-        val floatSlot = (slotterProgress + EPSILON)
+        val floatSlot = (slotterProgress + EPSILON / 10)
             .let { if (it >= 1) it - 1 else it }
             .let { it * SHOOTING_SLOTS }
 
