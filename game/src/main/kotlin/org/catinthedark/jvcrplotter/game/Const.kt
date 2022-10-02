@@ -47,7 +47,7 @@ object Const {
 
         object Tower {
             const val RADIUS = 60f
-            const val MAX_HP = 60f
+            const val MAX_HP = 600f
             const val VISUAL_HEIGHT = 180f
         }
     }
