@@ -26,6 +26,7 @@ object Assets {
 
     enum class Sounds(val path: String) {
         POWERUP("sounds/powerup.wav"),
+        HEAL("sounds/heal.wav"),
         SHOOT_01("sounds/1_sh.wav"),
         SHOOT_02("sounds/2_sh.wav"),
         SHOOT_03("sounds/3_sh.wav"),

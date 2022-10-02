@@ -79,6 +79,14 @@ class Bgm(
         }
     }
 
+    fun collectPowerup(isHeal: Boolean) {
+        if (isHeal) {
+            am.at(Assets.Sounds.HEAL).play()
+        } else {
+            am.at(Assets.Sounds.POWERUP).play()
+        }
+    }
+
     fun fadeIn(music: Assets.Music, force: Float = DEFAULT_FADE_FORCE) {
         volumeGains[music] = abs(force)
     }
