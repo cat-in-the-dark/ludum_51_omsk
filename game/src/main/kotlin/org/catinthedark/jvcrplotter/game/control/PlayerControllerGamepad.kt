@@ -2,9 +2,11 @@ package org.catinthedark.jvcrplotter.game.control
 
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.math.Vector2
+import org.slf4j.LoggerFactory
 import kotlin.math.abs
 
 class PlayerControllerGamepad(private val controller: Controller) : PlayerController {
+    private val threshHold = 0.05f
     override fun getDirection(): Vector2 {
         var x = controller.getAxis(controller.mapping.axisRightX)
         var x1 = controller.getAxis(controller.mapping.axisLeftX)
@@ -32,6 +34,13 @@ class PlayerControllerGamepad(private val controller: Controller) : PlayerContro
         }
         if (abs(y) < abs(y1)) {
             y = y1
+        }
+
+        if (abs(x) < threshHold) {
+            x = 0f
+        }
+        if (abs(y) < threshHold) {
+            y = 0f
         }
 
         return Vector2(x, y)
