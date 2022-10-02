@@ -11,46 +11,14 @@ import kotlin.math.roundToInt
 
 private const val DEFAULT_FADE_FORCE = 1.0f
 
-private const val MAX_PLAYERS = 4
-
-private const val BPM = 94
-
-private const val SHOOTING_SLOTS = 8
-
-private val MAX_SPEED = 1 + log2(SHOOTING_SLOTS.toDouble()).roundToInt()
-
-private const val EPSILON = 0.05f
-
-private const val BEATS_PER_SLOTTER = 2
-
 class Bgm(
     private val am: AssetManager
 ) {
+    val bullets = Shooter(am)
+
     private val logger = LoggerFactory.getLogger(javaClass)
 
     private val volumeGains = HashMap<Assets.Music, Float>()
-
-    private val bulletSlots = HashMap<Int, Int>()
-    private var lastSoundedSlot: Int? = null
-
-    private val slotToShoot = arrayOf(
-        Assets.Sounds.SHOOT_01,
-        Assets.Sounds.SHOOT_02,
-        Assets.Sounds.SHOOT_03,
-        Assets.Sounds.SHOOT_04,
-        Assets.Sounds.SHOOT_05,
-        Assets.Sounds.SHOOT_02,
-        Assets.Sounds.SHOOT_03,
-        Assets.Sounds.SHOOT_04,
-        Assets.Sounds.SHOOT_06,
-        Assets.Sounds.SHOOT_02,
-        Assets.Sounds.SHOOT_03,
-        Assets.Sounds.SHOOT_04,
-        Assets.Sounds.SHOOT_05,
-        Assets.Sounds.SHOOT_02,
-        Assets.Sounds.SHOOT_03,
-        Assets.Sounds.SHOOT_04,
-    )
 
     init {
         Assets.Music.values().forEach {
@@ -85,60 +53,4 @@ class Bgm(
     fun fadeInAll(force: Float = DEFAULT_FADE_FORCE) = Assets.Music.values().forEach { fadeIn(it, force) }
 
     fun fadeOutAll(force: Float = DEFAULT_FADE_FORCE) = Assets.Music.values().forEach { fadeOut(it, force) }
-
-    /**
-     * Прогресс текущего бита от 0 до 1
-     */
-    private val slotterProgress: Float
-        get() = ((am.at(Assets.Music.HI_TRASH).position * BPM / 60) / BEATS_PER_SLOTTER % 1.0f)
-
-    fun tryShoot(player: Int, speed: Int): Boolean {
-        check(player in 0 until MAX_PLAYERS)
-        check(speed in 1..MAX_SPEED)
-
-        val currentSlot = getCurrentShootingSlot()
-
-        if (lastSoundedSlot != currentSlot) {
-            lastSoundedSlot = null
-        }
-
-        val shiftedCurrentSlot = currentSlot?.let {
-            (it + player) % SHOOTING_SLOTS
-        } ?: return false
-
-        check(shiftedCurrentSlot in 0 until SHOOTING_SLOTS)
-
-        if (bulletSlots[player] == shiftedCurrentSlot) {
-            return false
-        }
-
-        if (shiftedCurrentSlot % (MAX_SPEED - speed + 1) != 0) {
-            return false
-        }
-
-        if (lastSoundedSlot != currentSlot) {
-            am.at(slotToShoot[currentSlot]).play()
-            lastSoundedSlot = currentSlot
-        }
-        bulletSlots[player] = shiftedCurrentSlot
-        return true
-    }
-
-    fun tryShootIf(player: Int, speed: Int, func: () -> Unit) {
-        if (tryShoot(player, speed)) {
-            func()
-        }
-    }
-
-    private fun getCurrentShootingSlot(): Int? {
-        val floatSlot = (slotterProgress + EPSILON / 10)
-            .let { if (it >= 1) it - 1 else it }
-            .let { it * SHOOTING_SLOTS }
-
-        val intSlot = floatSlot.toInt()
-
-        val dist = (floatSlot - intSlot) / SHOOTING_SLOTS
-
-        return intSlot.takeIf { dist < EPSILON }
-    }
 }
