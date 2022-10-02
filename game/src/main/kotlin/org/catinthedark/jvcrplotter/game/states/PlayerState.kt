@@ -38,12 +38,7 @@ class PlayerState : IState {
     private val enemiesController = IOC.atOrPut("enemiesController", EnemiesController())
     private val enemies: MutableList<SimpleEnemy> by lazy { IOC.atOrFail("enemies") }
     private val powerUpsController = IOC.atOrPut("powerUpsController", PowerUpsController())
-    private val enemyGenerators = listOf(
-        EnemyGenerator(Const.Balance.generatorPlaces[0]),
-        EnemyGenerator(Const.Balance.generatorPlaces[1]),
-        EnemyGenerator(Const.Balance.generatorPlaces[2]),
-        EnemyGenerator(Const.Balance.generatorPlaces[3]),
-    )
+    private val enemyGenerators = mutableListOf<EnemyGenerator>()
     private val bullets: MutableList<Bullet> = IOC.atOrPut("bullets", mutableListOf())
     private val players: MutableList<Player> = IOC.atOrPut("players", mutableListOf())
     private val gamepads: Array<Controller>? = Controllers.getControllers()
@@ -65,6 +60,7 @@ class PlayerState : IState {
         bullets.clear()
         players.clear()
         enemies.clear()
+        enemyGenerators.clear()
     }
 
     override fun onUpdate() {
@@ -72,6 +68,7 @@ class PlayerState : IState {
             if (activePlayers < 4 && !it.value && it.key.getDirection().len() > 0.0001) {
                 players.add(Player(Vector2(0f, 0f), colors[activePlayers], it.key))
                 controllers[it.key] = true
+                enemyGenerators.add(EnemyGenerator(Const.Balance.generatorPlaces[activePlayers]))
                 activePlayers++
             }
         }
