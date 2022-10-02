@@ -52,7 +52,7 @@ class Player(
     private val logger = LoggerFactory.getLogger(javaClass)
     private val render: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
 
-    private var currentHP: Float = stats.maxHP
+    var currentHP: Float = stats.maxHP
     val height = 48f
     val width = 32f
 
@@ -66,6 +66,7 @@ class Player(
     private var fallTime = 0f
 
     var nova: Nova? = null
+    var healNova: HealNova? = null
 
     val p1: Vector2
         get() = Vector2(pos.x + width / 2, pos.y)
@@ -159,6 +160,13 @@ class Player(
             it.update()
             if (it.shouldDestroy) {
                 nova = null
+            }
+        }
+
+        healNova?.also {
+            it.update()
+            if (it.shouldDestroy) {
+                healNova = null
             }
         }
     }
