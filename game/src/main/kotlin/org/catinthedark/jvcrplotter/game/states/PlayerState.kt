@@ -118,7 +118,7 @@ class PlayerState : IState {
         }
 
         // TODO: shoot only if there ia any enemy in a distance
-        bgm.bullets.tryShootIf(playerId, 1) {
+        bgm.bullets.tryShootIf(playerId, player.stats.bulletsFireSpeed) {
             for (i in 0 until player.stats.bulletsCount) {
                 val target = targets[i % targets.size]
                 val dir = target.first.pos.cpy().sub(player.center).nor()

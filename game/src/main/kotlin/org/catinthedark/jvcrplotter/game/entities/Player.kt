@@ -21,13 +21,13 @@ import org.slf4j.LoggerFactory
 import kotlin.math.max
 import kotlin.math.pow
 
-data class Stats(var bulletsCount: Int, var maxHP: Float)
+data class Stats(var bulletsCount: Int, var bulletsFireSpeed: Int, var maxHP: Float)
 
 class Player(
     override val pos: Vector2,
     private val color: Color,
     private val controller: PlayerController,
-    val stats: Stats = Stats(bulletsCount = 1, maxHP = 16f), override var shouldDestroy: Boolean = false,
+    val stats: Stats = Stats(bulletsCount = 1, bulletsFireSpeed = 1, maxHP = 16f), override var shouldDestroy: Boolean = false,
 ) : ITransform, ICollisionRect, IDestructible {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val render: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }

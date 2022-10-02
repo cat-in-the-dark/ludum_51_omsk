@@ -36,6 +36,7 @@ object Const {
 
         object PowerUp {
             const val TIMEOUT = 10f
+            const val MAX_FIRE_SPEED = 4
         }
 
         object Tower {
