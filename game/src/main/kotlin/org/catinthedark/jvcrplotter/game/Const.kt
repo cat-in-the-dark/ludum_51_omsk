@@ -32,6 +32,7 @@ object Const {
 
         object Spawn {
             const val TIMEOUT = 1f
+            const val BOSS_COOLDOWN = 2f
             const val SIN_TIME_SCALE = 2f
             const val MAX_SPAWN = 2f
         }

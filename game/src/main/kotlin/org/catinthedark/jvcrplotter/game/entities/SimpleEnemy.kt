@@ -20,6 +20,7 @@ class SimpleEnemy(
     val damage: Float,
     private var hp: Float,
     val speed: Vector2,
+    val isBoss: Boolean,
     private val hitCooldownTime: Float
 ) : ITransform, IUpdatable, IDestructible {
     override var shouldDestroy = false
