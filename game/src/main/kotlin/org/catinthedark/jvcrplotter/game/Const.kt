@@ -1,6 +1,7 @@
 package org.catinthedark.jvcrplotter.game
 
 import com.badlogic.gdx.math.Rectangle
+import com.badlogic.gdx.math.Vector2
 
 object Const {
     object Screen {
@@ -10,6 +11,7 @@ object Const {
     }
 
     object Balance {
+        val PLAYER_SPAWN_POINT = Vector2(Screen.WIDTH / 2f, Screen.HEIGHT/2f)
         const val ENEMY_SPAWN_TIMEOUT = 2f
         const val MAX_PLAYER_SPEED = 300f
         const val MAX_PLAYERS = 4

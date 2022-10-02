@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.audio.Bgm
 import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.Const
+import org.catinthedark.jvcrplotter.game.Const.Balance.PLAYER_SPAWN_POINT
 import org.catinthedark.jvcrplotter.game.States
 import org.catinthedark.jvcrplotter.game.control.PlayerController
 import org.catinthedark.jvcrplotter.game.control.PlayerControllerArrowKeys
@@ -70,7 +71,7 @@ class PlayerState : IState {
     override fun onUpdate() {
         controllers.forEach {
             if (activePlayers < 4 && !it.value && it.key.getDirection().len() > 0.0001) {
-                players.add(Player(Vector2(0f, 0f), colors[activePlayers], it.key))
+                players.add(Player(PLAYER_SPAWN_POINT.cpy(), colors[activePlayers], it.key))
                 controllers[it.key] = true
                 enemyGenerators.add(EnemyGenerator(Const.Balance.generatorPlaces[activePlayers]))
                 activePlayers++
