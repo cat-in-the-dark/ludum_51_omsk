@@ -1,4 +1,4 @@
-package org.catinthedark.jvcrplotter.lib
+package org.catinthedark.jvcrplotter.lib.interfaces
 
 import com.badlogic.gdx.math.Rectangle
 
