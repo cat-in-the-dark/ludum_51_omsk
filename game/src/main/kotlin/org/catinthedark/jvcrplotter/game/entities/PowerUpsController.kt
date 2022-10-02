@@ -14,16 +14,6 @@ class PowerUpsController {
     }
 
     fun update() {
-        players.forEach { player ->
-            val collidedPowerUps = powerUps.filter {
-                it.getCollisionRect().overlaps(player.getCollisionRect())
-            }.toList()
-            collidedPowerUps.forEach {
-                it.apply(player)
-            }
-            powerUps.removeAll(collidedPowerUps)
-        }
-
         powerUps.forEach {
             it.update()
         }
