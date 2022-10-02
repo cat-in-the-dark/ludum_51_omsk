@@ -13,16 +13,20 @@ class CollisionsSystem {
         val bullets: MutableList<Bullet> = IOC.atOrFail("bullets")
         val powerUps: MutableList<PowerUp> = IOC.atOrFail("powerUps")
 
+        players.forEach { player ->
+            // TODO: collide them
+            val collidedPowerUps = powerUps.filter {
+                it.getCollisionRect().overlaps(player.getCollisionRect())
+            }.toList()
+            collidedPowerUps.forEach {
+                it.apply(player)
+            }
+            powerUps.removeAll(collidedPowerUps)
+        }
+
         enemies.forEach { enemy ->
             players.forEach { player ->
-                // TODO: collide them
-                val collidedPowerUps = powerUps.filter {
-                    it.getCollisionRect().overlaps(player.getCollisionRect())
-                }.toList()
-                collidedPowerUps.forEach {
-                    it.apply(player)
-                }
-                powerUps.removeAll(collidedPowerUps)
+                // TODO: collide enemies and player
             }
 
             bullets.forEach { bullet ->
