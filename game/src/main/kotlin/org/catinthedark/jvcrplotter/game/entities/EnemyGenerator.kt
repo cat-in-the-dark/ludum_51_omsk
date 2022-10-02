@@ -29,9 +29,11 @@ class EnemyGenerator(
     fun update() {
         time += Gdx.graphics.deltaTime
         repeater.invoke {
-            val s = (MathUtils.sin(time / SIN_TIME_SCALE) + 1) / 2f // 0..1
-            val count = MathUtils.round(MAX_SPAWN * s)
-            for (i in 0..count) {
+            val fixedTime = time / SIN_TIME_SCALE
+            val spawn = MathUtils.map(-1f, 1f, 0f, 1f, MathUtils.sin(fixedTime))
+            val waveNumber = MathUtils.ceil(fixedTime / MathUtils.PI2)
+            val count = MathUtils.round(waveNumber * spawn * MAX_SPAWN)
+            for (i in 0 until count) {
                 val x = bounds.x + Random.nextFloat() * bounds.width
                 val y = bounds.y + Random.nextFloat() * bounds.height
                 val enemy = SimpleEnemy(
@@ -40,6 +42,7 @@ class EnemyGenerator(
                     damage = 0.5f,
                     hitCooldownTime = 0.1f,
                     hp = 1f,
+                    speed = Vector2(50f, 50f)
                 )
                 controller.registerEnemy(enemy)
             }

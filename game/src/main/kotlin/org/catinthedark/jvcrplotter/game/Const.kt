@@ -33,7 +33,7 @@ object Const {
         object Spawn {
             const val TIMEOUT = 1f
             const val SIN_TIME_SCALE = 2f
-            const val MAX_SPAWN = 6f
+            const val MAX_SPAWN = 2f
         }
 
         object PowerUp {

@@ -19,8 +19,8 @@ class SimpleEnemy(
     val radius: Float,
     val damage: Float,
     private var hp: Float,
-    private val hitCooldownTime: Float,
-    private var speed: Vector2 = Vector2(50f, 50f)
+    val speed: Vector2,
+    private val hitCooldownTime: Float
 ) : ITransform, IUpdatable, IDestructible {
     override var shouldDestroy = false
     private var target: ITransform? = null
