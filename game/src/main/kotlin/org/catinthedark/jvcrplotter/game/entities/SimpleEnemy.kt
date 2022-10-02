@@ -64,6 +64,13 @@ class SimpleEnemy(
         }
     }
 
+    fun damage(damage: Float) {
+        hp -= damage
+        if (hp <= 0) {
+            shouldDestroy = true
+        }
+    }
+
     fun tryHit(func: () -> Unit) {
         hitCooldown.invoke { func() }
     }

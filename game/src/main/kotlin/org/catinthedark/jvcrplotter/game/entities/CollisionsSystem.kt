@@ -1,5 +1,6 @@
 package org.catinthedark.jvcrplotter.game.entities
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.game.entities.powerups.PowerUp
@@ -78,6 +79,12 @@ class CollisionsSystem {
                     )
                 ) {
                     onHitPlayerEnemy(player, enemy)
+                }
+
+                player.nova?.apply {
+                    if (intersectTriangleCircle(p1, p2, p3, enemy.center, enemy.radius)) {
+                        enemy.damage(stats.novaDmg * Gdx.graphics.deltaTime)
+                    }
                 }
             }
 
