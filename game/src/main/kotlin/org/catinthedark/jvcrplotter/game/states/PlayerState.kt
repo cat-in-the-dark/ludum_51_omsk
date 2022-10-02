@@ -18,6 +18,7 @@ import org.catinthedark.jvcrplotter.lib.atOrPut
 import org.catinthedark.jvcrplotter.lib.math.randomDir
 import org.catinthedark.jvcrplotter.lib.states.IState
 import org.slf4j.LoggerFactory
+import java.util.PriorityQueue
 
 class PlayerState : IState {
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -30,6 +31,7 @@ class PlayerState : IState {
     )
 
     private val enemiesController = IOC.atOrPut("enemiesController", EnemiesController())
+    private val enemies: List<SimpleEnemy> by lazy { IOC.atOrFail("enemies") }
     private val powerUpsController = IOC.atOrPut("powerUpsController", PowerUpsController())
     private val enemyGenerators = listOf(
         EnemyGenerator(Const.Balance.generatorPlaces[0]),
@@ -45,18 +47,6 @@ class PlayerState : IState {
     private val bgm: Bgm by lazy { IOC.atOrFail("bgm") }
     private val powerUpsGenerator = PowerUpsGenerator()
     private val tower = Tower(Vector2(Const.Screen.WIDTH / 2f, Const.Screen.HEIGHT / 3f * 2f))
-
-    private fun spawnBullets() {
-        players.forEachIndexed { playerId, player ->
-            // TODO: shoot only if there ia any enemy in a distance
-            bgm.tryShootIf(playerId, 1) {
-                for (i in 0 until player.stats.bulletsCount) {
-                    val dir = randomDir()
-                    bullets.add(Bullet(player.pos.cpy(), dir))
-                }
-            }
-        }
-    }
 
     override fun onActivate() {
         logger.info("here!")
@@ -83,12 +73,12 @@ class PlayerState : IState {
         collisionsSystem.update()
         garbageCollectorSystem.update()
 
-        players.forEach {
-            it.update()
+        players.forEachIndexed { idx, player ->
+            player.update()
+            tryShoot(player, idx)
         }
 
         enemiesController.update()
-        spawnBullets()
         bullets.forEach { it.update() }
         enemyGenerators.forEach { it.update() } // TODO: update only for online players
         powerUpsGenerator.update()
@@ -97,5 +87,33 @@ class PlayerState : IState {
     }
 
     override fun onExit() {
+    }
+
+    private fun tryShoot(player: Player, playerId: Int) {
+        val targets = enemies.map { enemy ->
+            val dst = player.center.dst(enemy.pos)
+            Pair(enemy, dst)
+        }.filter { (_, dst) ->
+            dst <= Const.Balance.MAX_SHOOT_DIST
+        }.sortedBy { it.second }
+
+        if (targets.isEmpty()) {
+            return
+        }
+
+        // TODO: shoot only if there ia any enemy in a distance
+        bgm.tryShootIf(playerId, 1) {
+            for (i in 0 until player.stats.bulletsCount) {
+                val target = targets[i % targets.size]
+                val dir = target.first.pos.cpy().sub(player.center).nor()
+                val pos = player.pos.cpy()
+                if (i >= targets.size) {
+                    val jitter = randomDir().scl(2f)
+                    pos.add(jitter)
+                    dir.add(jitter).nor()
+                }
+                bullets.add(Bullet(pos, dir))
+            }
+        }
     }
 }

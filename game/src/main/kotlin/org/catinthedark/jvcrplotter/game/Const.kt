@@ -14,6 +14,7 @@ object Const {
         const val MAX_PLAYER_SPEED = 300f
         const val MAX_PLAYERS = 4
         const val MAX_FOLLOW_DIST = 600
+        const val MAX_SHOOT_DIST = 500
 
         val generatorPlaces = listOf(
             Rectangle(5f, 5f, 1270f, 64f),
