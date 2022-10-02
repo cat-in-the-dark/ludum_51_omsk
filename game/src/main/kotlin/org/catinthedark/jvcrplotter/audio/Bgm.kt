@@ -7,7 +7,7 @@ import org.catinthedark.jvcrplotter.game.at
 import org.slf4j.LoggerFactory
 import kotlin.math.abs
 
-private const val DEFAULT_FADE_FORCE = 1.0f
+private const val DEFAULT_FADE_FORCE = 0.4f
 
 class Bgm(
     private val am: AssetManager
@@ -64,6 +64,18 @@ class Bgm(
     fun update(dt: Float = Gdx.graphics.deltaTime) = Assets.Music.values().forEach {
         am.at(it).apply {
             volume = (volume + dt * (volumeGains[it] ?: 0.0f)).coerceIn(0.0f, 1.0f)
+        }
+    }
+
+    fun updateLayers(bossesCount: Int, playersCount: Int) {
+        fadeOutAll()
+        if (playersCount <= 0) {
+            fadeIn(Assets.Music.LO_TRASH)
+        } else {
+            fadeIn(Assets.Music.BASS)
+            if (bossesCount > 0) {
+                fadeIn(Assets.Music.HI_TRASH)
+            }
         }
     }
 
