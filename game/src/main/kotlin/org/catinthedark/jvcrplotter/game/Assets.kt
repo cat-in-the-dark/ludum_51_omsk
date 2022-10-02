@@ -15,12 +15,14 @@ object Assets {
     }
 
     object Names {
-        val LOGO = "textures/title.png"
+        val LOGO = "textures/logo.png"
         val TITLE = "textures/title.png"
+        val GAME_OVR = "textures/game_over.png"
 
         val textures = listOf(
             LOGO,
             TITLE,
+            GAME_OVR,
         )
     }
 

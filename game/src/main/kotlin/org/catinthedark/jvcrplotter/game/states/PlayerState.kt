@@ -2,7 +2,6 @@ package org.catinthedark.jvcrplotter.game.states
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.controllers.Controllers
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.audio.Bgm
@@ -10,9 +9,6 @@ import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.Const.Balance.PLAYER_SPAWN_POINT
 import org.catinthedark.jvcrplotter.game.States
 import org.catinthedark.jvcrplotter.game.control.PlayerController
-import org.catinthedark.jvcrplotter.game.control.PlayerControllerArrowKeys
-import org.catinthedark.jvcrplotter.game.control.PlayerControllerGamepad
-import org.catinthedark.jvcrplotter.game.control.PlayerControllerWasd
 import org.catinthedark.jvcrplotter.game.entities.*
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.atOrFail
@@ -25,14 +21,7 @@ class PlayerState : IState {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     private val colors = listOf(Color.CORAL, Color.CHARTREUSE, Color.GOLDENROD, Color.ROYAL)
-
-    private val controllers = IOC.atOrPut(
-        "input", mutableMapOf<PlayerController, Boolean>(
-            Pair(PlayerControllerWasd(), false),
-            Pair(PlayerControllerArrowKeys(), false)
-        )
-    )
-
+    private val controllers: MutableMap<PlayerController, Boolean> by lazy { IOC.atOrFail("input") }
     private val enemiesController = IOC.atOrPut("enemiesController", EnemiesController())
     private val enemies: MutableList<SimpleEnemy> by lazy { IOC.atOrFail("enemies") }
     private val powerUpsController = IOC.atOrPut("powerUpsController", PowerUpsController())
@@ -46,13 +35,6 @@ class PlayerState : IState {
     private lateinit var tower: Tower
 
     private var activePlayers = 0
-
-    init {
-        Controllers.getControllers()?.forEach {
-            logger.info("Gamepad: ${it.name} ${it.uniqueId}")
-            controllers[PlayerControllerGamepad(it)] = false
-        }
-    }
 
     override fun onActivate() {
         logger.info("here!")

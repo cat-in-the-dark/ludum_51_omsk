@@ -3,19 +3,27 @@ package org.catinthedark.jvcrplotter.game
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.controllers.Controllers
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FitViewport
+import org.catinthedark.jvcrplotter.game.control.PlayerController
+import org.catinthedark.jvcrplotter.game.control.PlayerControllerArrowKeys
+import org.catinthedark.jvcrplotter.game.control.PlayerControllerGamepad
+import org.catinthedark.jvcrplotter.game.control.PlayerControllerWasd
 import org.catinthedark.jvcrplotter.game.states.*
 import org.catinthedark.jvcrplotter.lib.Deffer
 import org.catinthedark.jvcrplotter.lib.DefferImpl
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.states.StateMachine
+import org.slf4j.LoggerFactory
 
 class MainGame : Game() {
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     private val stage: Stage by lazy {
         Stage(
             FitViewport(
@@ -43,17 +51,6 @@ class MainGame : Game() {
                 States.GAME_OVER_SCREEN to GameOverState(),
                 States.TEST_AUDIO_SCREEN to TestAudioState(),
             )
-            putMixin(States.TITLE_SCREEN) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                    IOC.put("state", States.SPLASH_SCREEN)
-                }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-                    IOC.put("state", States.TEST_AUDIO_SCREEN)
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.P)) {
-                    IOC.put("state", States.PLAYER_SCREEN)
-                }
-            }
         }
     }
     private val shapeRenderer: ShapeRenderer by lazy {
@@ -69,6 +66,16 @@ class MainGame : Game() {
         IOC.put("hud", hud)
         IOC.put("shapeRenderer", shapeRenderer)
         IOC.put("state", States.SPLASH_SCREEN)
+
+        val controllers = mutableMapOf<PlayerController, Boolean>(
+            Pair(PlayerControllerWasd(), false),
+            Pair(PlayerControllerArrowKeys(), false)
+        )
+        Controllers.getControllers()?.forEach {
+            logger.info("Gamepad: ${it.name} ${it.uniqueId}")
+            controllers[PlayerControllerGamepad(it)] = false
+        }
+        IOC.put("input", controllers)
     }
 
     override fun render() {
