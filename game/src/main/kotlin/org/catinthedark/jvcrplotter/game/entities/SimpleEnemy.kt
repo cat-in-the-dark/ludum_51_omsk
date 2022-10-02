@@ -64,7 +64,7 @@ class SimpleEnemy(
         }
     }
 
-    fun tryHitPlayer(player: Player, func: () -> Unit) {
+    fun tryHit(func: () -> Unit) {
         hitCooldown.invoke { func() }
     }
 }

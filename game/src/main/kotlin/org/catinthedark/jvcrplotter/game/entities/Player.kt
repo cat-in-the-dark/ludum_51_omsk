@@ -153,10 +153,10 @@ class Player(
     }
 
     fun hit(damage: Float) {
-        logger.info("HIT dmg=$damage hp=$currentHP")
+//        logger.info("HIT dmg=$damage hp=$currentHP")
         currentHP -= damage
         if (currentHP <= 0) {
-            logger.info("DIED FROM CRINGE")
+//            logger.info("DIED FROM CRINGE")
             currentHP = 0f
         }
     }
