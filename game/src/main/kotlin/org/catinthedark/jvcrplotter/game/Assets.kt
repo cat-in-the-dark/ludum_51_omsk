@@ -35,11 +35,10 @@ object Assets {
     }
 
     enum class Music(val path: String) {
-//        KICK02("music/3_kick02.ogg"), // TODO убрать лишние файлы ассетов
-//        SNARE06("music/4_snare06.ogg"),
-//        SNARE02("music/5_snare02.ogg"),
-        LO_TRASH("music/2_lo-trash.ogg"),
-        HI_TRASH("music/1_hi-trash.ogg"),
+        BASS("music/4_bass.ogg"),
+        LO_TRASH("music/1_lo-trash.ogg"),
+        DREAM("music/3_dream.ogg"),
+        HI_TRASH("music/2_hi-trash.ogg"),
     }
 }
 
