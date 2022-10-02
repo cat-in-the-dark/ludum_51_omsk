@@ -10,6 +10,10 @@ fun ShapeRenderer.managed(type: ShapeRenderer.ShapeType, block: (shapeRenderer: 
 }
 
 fun ShapeRenderer.polygon2(vararg vertices: Vector2) {
+    this.polygon2(listOf(*vertices))
+}
+
+fun ShapeRenderer.polygon2(vertices: List<Vector2>) {
     val verticesCoordinates = vertices.flatMap {
         listOf(it.x, it.y)
     }.toFloatArray()
