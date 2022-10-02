@@ -39,6 +39,8 @@ class Player(
         get() = Vector2(pos.x + playerWidth, pos.y + playerHeight)
     val exradius: Float
         get() = max(playerHeight / 2f, playerWidth / 2f)
+    val center: Vector2
+        get() = Vector2(pos.x + playerWidth / 2f, pos.y + playerHeight / 2f)
 
     private fun updatePos() {
         val dir = controller.getDirection()

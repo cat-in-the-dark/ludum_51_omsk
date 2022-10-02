@@ -37,7 +37,7 @@ class CollisionsSystem {
                 if (intersectCircles(
                         enemy.pos,
                         enemy.radius,
-                        player.pos,
+                        player.center,
                         player.exradius
                     )
                 ) {
