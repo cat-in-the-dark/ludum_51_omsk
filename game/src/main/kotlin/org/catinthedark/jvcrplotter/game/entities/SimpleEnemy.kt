@@ -15,6 +15,7 @@ class SimpleEnemy(
     override val pos: Vector2,
     val radius: Float,
     val damage: Float,
+    private var hp: Float,
     private val hitCooldownTime: Float,
     private var speed: Vector2 = Vector2(50f, 50f)
 ) : ITransform, IUpdatable, IDestructible {
@@ -37,6 +38,8 @@ class SimpleEnemy(
     }
 
     override fun update() {
+        if (shouldDestroy) return
+
         val dir = dirTo(target)
         pos.mulAdd(dir, speed.cpy().scl(Gdx.graphics.deltaTime))
 
@@ -49,7 +52,10 @@ class SimpleEnemy(
     }
 
     fun damage(bullet: Bullet) {
-        shouldDestroy = true
+        hp -= bullet.dmg
+        if (hp <= 0) {
+            shouldDestroy = true
+        }
     }
 
     fun tryHitPlayer(player: Player, func: () -> Unit) {

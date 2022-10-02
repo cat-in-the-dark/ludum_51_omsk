@@ -135,7 +135,7 @@ class PlayerState : IState {
                     pos.add(jitter)
                     dir.add(jitter).nor()
                 }
-                bullets.add(Bullet(pos, dir))
+                bullets.add(Bullet(pos, dir, player.stats.bulletDamage))
             }
         }
     }

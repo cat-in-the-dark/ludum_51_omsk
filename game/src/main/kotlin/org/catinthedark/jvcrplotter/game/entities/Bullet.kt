@@ -17,7 +17,8 @@ import org.catinthedark.jvcrplotter.lib.math.isInViewPort
 class Bullet(
     override val pos: Vector2,
     private val dir: Vector2,
-    private val speed: Vector2 = Vector2(350f, 350f)
+    val dmg: Float,
+    private val speed: Vector2 = Vector2(350f, 350f),
 ) : ITransform, IUpdatable, IDestructible, ICollisionRect {
     override var shouldDestroy = false
     private val size = 25f
