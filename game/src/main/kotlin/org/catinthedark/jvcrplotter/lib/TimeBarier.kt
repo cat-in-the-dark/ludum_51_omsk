@@ -1,6 +1,7 @@
 package org.catinthedark.jvcrplotter.lib
 
 import com.badlogic.gdx.Gdx
+import kotlin.math.min
 
 private fun delta() = Gdx.graphics.deltaTime
 
@@ -29,6 +30,9 @@ class OnceBarrier(
         time = 0f
         called = false
     }
+
+    val timeAmount
+        get() = (after - min(time, after)) / after
 }
 
 class AfterBarrier(

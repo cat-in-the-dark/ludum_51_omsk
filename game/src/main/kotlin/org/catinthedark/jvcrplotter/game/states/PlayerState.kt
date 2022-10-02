@@ -6,7 +6,6 @@ import com.badlogic.gdx.controllers.Controllers
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.audio.Bgm
-import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.Const.Balance.PLAYER_SPAWN_POINT
 import org.catinthedark.jvcrplotter.game.States
@@ -84,6 +83,7 @@ class PlayerState : IState {
         players.forEachIndexed { idx, player ->
             player.update()
             tryShoot(player, idx)
+            tryNova(player, idx)
         }
 
         enemiesController.update()
@@ -93,7 +93,7 @@ class PlayerState : IState {
         powerUpsController.update()
         tower.update()
         bgm.update()
-        bgm.updateLayers(playersCount = 1, bossesCount = 0) // TODO: use actual values
+        bgm.updateLayers(playersCount = players.size, bossesCount = 0) // TODO: use actual values
 
         checkGameOver()
         checkRestart()
@@ -127,6 +127,27 @@ class PlayerState : IState {
                 }
                 bullets.add(Bullet(pos, dir, player.stats.bulletDamage))
             }
+        }
+    }
+
+    private fun tryNova(player: Player, playerId: Int) {
+//        if (Gdx.input.isKeyPressed(Input.Keys.N)) {
+//            logger.info("NOVA CHEAT")
+//            player.nova = Nova(
+//                center = player.center,
+//                radius = player.height,
+//                stats = NovaStats(),
+//            )
+//        }
+
+        val novaOptions = player.stats.nova ?: return
+
+        bgm.novas.tryShootIf(playerId, novaOptions.novaFreq) {
+            player.nova = Nova(
+                center = player.center,
+                radius = player.height,
+                stats = novaOptions,
+            )
         }
     }
 

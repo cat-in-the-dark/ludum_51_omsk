@@ -1,6 +1,7 @@
 package org.catinthedark.jvcrplotter.game.entities
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -21,26 +22,39 @@ import org.slf4j.LoggerFactory
 import kotlin.math.max
 import kotlin.math.pow
 
+data class NovaStats(
+    var novaFreq: Int = Const.Balance.PowerUp.MIN_NOVA_FREQ,
+    var novaDmg: Float = 10f,
+    var novaDuration: Float = 0.5f,
+    var novaSpeed: Float = 360f,
+)
+
 data class Stats(
     var bulletsCount: Int,
     var bulletsFireSpeed: Int,
     var maxHP: Float,
     var bulletDamage: Float,
+    var nova: NovaStats? = null
 )
 
 class Player(
     override val pos: Vector2,
     private val color: Color,
     private val controller: PlayerController,
-    val stats: Stats = Stats(bulletsCount = 1, bulletsFireSpeed = 1, maxHP = 16f, bulletDamage = 1.1f),
+    val stats: Stats = Stats(
+        bulletsCount = 1,
+        bulletsFireSpeed = 1,
+        maxHP = 16f,
+        bulletDamage = 1.1f,
+    ),
     override var shouldDestroy: Boolean = false,
 ) : ITransform, ICollisionRect, IDestructible {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val render: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
 
     private var currentHP: Float = stats.maxHP
-    private val playerHeight = 48f
-    private val playerWidth = 32f
+    val height = 48f
+    val width = 32f
 
     private val minVisualHeight = 40f
     private var visualHeight = 48f
@@ -51,16 +65,18 @@ class Player(
     private var moveTime = 0f
     private var fallTime = 0f
 
+    var nova: Nova? = null
+
     val p1: Vector2
-        get() = Vector2(pos.x + playerWidth / 2, pos.y)
+        get() = Vector2(pos.x + width / 2, pos.y)
     val p2: Vector2
-        get() = Vector2(pos.x, pos.y + playerHeight)
+        get() = Vector2(pos.x, pos.y + height)
     val p3: Vector2
-        get() = Vector2(pos.x + playerWidth, pos.y + playerHeight)
+        get() = Vector2(pos.x + width, pos.y + height)
     val exradius: Float
-        get() = max(playerHeight / 2f, playerWidth / 2f)
+        get() = max(height / 2f, width / 2f)
     val center: Vector2
-        get() = Vector2(pos.x + playerWidth / 2f, pos.y + playerHeight / 2f)
+        get() = Vector2(pos.x + width / 2f, pos.y + height / 2f)
 
     private fun updatePos() {
         val dir = controller.getDirection()
@@ -85,13 +101,13 @@ class Player(
 
         visualHeight = if (isMoving) {
             MathUtils.map(
-                -1f, 1f, minVisualHeight, playerHeight, cos(moveTime * 20)
+                -1f, 1f, minVisualHeight, height, cos(moveTime * 20)
             )
         } else {
-            playerHeight
+            height
         }
 
-        val p1Cached = p1.cpy().add(0f, visualHeight - playerHeight)
+        val p1Cached = p1.cpy().add(0f, visualHeight - height)
 
         render.managed(ShapeRenderer.ShapeType.Line) {
             it.color = color
@@ -134,8 +150,18 @@ class Player(
         }
     }
 
+    private fun updateNova() {
+        nova?.also {
+            it.update()
+            if (it.shouldDestroy) {
+                nova = null
+            }
+        }
+    }
+
     fun update() {
         time += Gdx.graphics.deltaTime
+        updateNova()
         if (currentHP > 0) {
             updatePos()
             draw()
@@ -149,7 +175,7 @@ class Player(
     }
 
     override fun getCollisionRect(): Rectangle {
-        return Rectangle(pos.x, pos.y, playerWidth, playerHeight)
+        return Rectangle(pos.x, pos.y, width, height)
     }
 
     fun hit(damage: Float) {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.entities.powerups.FirePowerUp
+import org.catinthedark.jvcrplotter.game.entities.powerups.NovaPowerUp
 import org.catinthedark.jvcrplotter.game.entities.powerups.PowerUp
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.RepeatBarrier
@@ -15,7 +16,7 @@ class PowerUpsGenerator {
     private val repeater = RepeatBarrier(0f, Const.Balance.PowerUp.TIMEOUT)
     private val controller: PowerUpsController by lazy { IOC.atOrFail("powerUpsController") }
 
-    private val powerUpsPool = listOf("fire", "fire", "fire", "fire")
+    private val powerUpsPool = listOf("fire", "nova", "fire", "fire")
 
     private var time = 0f
 
@@ -37,6 +38,9 @@ class PowerUpsGenerator {
     private fun createPowerUp(name: String, pos: Vector2): PowerUp {
         if (name == "fire") {
             return FirePowerUp(pos)
+        }
+        if (name == "nova") {
+            return NovaPowerUp(pos)
         }
         return TODO("Provide the return value")
     }
