@@ -2,11 +2,17 @@ package org.catinthedark.jvcrplotter.game.control
 
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.math.Vector2
-import org.slf4j.LoggerFactory
 import kotlin.math.abs
 
 class PlayerControllerGamepad(private val controller: Controller) : PlayerController {
     private val threshHold = 0.1f
+    override fun isStartPressed(): Boolean {
+        return controller.getButton(controller.mapping.buttonA)
+            || controller.getButton(controller.mapping.buttonB)
+            || controller.getButton(controller.mapping.buttonX)
+            || controller.getButton(controller.mapping.buttonY)
+    }
+
     override fun getDirection(): Vector2 {
         var x = controller.getAxis(controller.mapping.axisRightX)
         var x1 = controller.getAxis(controller.mapping.axisLeftX)

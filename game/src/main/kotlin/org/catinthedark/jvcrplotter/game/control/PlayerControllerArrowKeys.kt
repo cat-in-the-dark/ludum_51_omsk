@@ -24,4 +24,8 @@ class PlayerControllerArrowKeys : PlayerController {
 
         return Vector2(horizontal, vertical).nor()
     }
+
+    override fun isStartPressed(): Boolean {
+        return Gdx.input.isKeyPressed(Input.Keys.ENTER)
+    }
 }

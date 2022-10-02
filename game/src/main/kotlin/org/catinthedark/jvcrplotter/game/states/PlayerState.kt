@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array
 import org.catinthedark.jvcrplotter.audio.Bgm
 import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.Const
+import org.catinthedark.jvcrplotter.game.States
 import org.catinthedark.jvcrplotter.game.control.PlayerController
 import org.catinthedark.jvcrplotter.game.control.PlayerControllerArrowKeys
 import org.catinthedark.jvcrplotter.game.control.PlayerControllerGamepad
@@ -21,20 +22,21 @@ import org.catinthedark.jvcrplotter.lib.atOrPut
 import org.catinthedark.jvcrplotter.lib.math.randomDir
 import org.catinthedark.jvcrplotter.lib.states.IState
 import org.slf4j.LoggerFactory
-import java.util.PriorityQueue
 
 class PlayerState : IState {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     private val colors = listOf(Color.CORAL, Color.CHARTREUSE, Color.GOLDENROD, Color.ROYAL)
 
-    private val controllers = mutableMapOf<PlayerController, Boolean>(
-        Pair(PlayerControllerWasd(), false),
-        Pair(PlayerControllerArrowKeys(), false)
+    private val controllers = IOC.atOrPut(
+        "input", mutableMapOf<PlayerController, Boolean>(
+            Pair(PlayerControllerWasd(), false),
+            Pair(PlayerControllerArrowKeys(), false)
+        )
     )
 
     private val enemiesController = IOC.atOrPut("enemiesController", EnemiesController())
-    private val enemies: List<SimpleEnemy> by lazy { IOC.atOrFail("enemies") }
+    private val enemies: MutableList<SimpleEnemy> by lazy { IOC.atOrFail("enemies") }
     private val powerUpsController = IOC.atOrPut("powerUpsController", PowerUpsController())
     private val enemyGenerators = listOf(
         EnemyGenerator(Const.Balance.generatorPlaces[0]),
@@ -60,6 +62,9 @@ class PlayerState : IState {
             controllers[PlayerControllerGamepad(it)] = false
         }
         activePlayers = 0
+        bullets.clear()
+        players.clear()
+        enemies.clear()
     }
 
     override fun onUpdate() {
@@ -86,6 +91,8 @@ class PlayerState : IState {
         powerUpsController.update()
         tower.update()
         bgm.update()
+
+        checkGameOver()
 
         // TODO remove testBgm
         testBgm(Input.Keys.NUM_1, Assets.Music.BASS)
@@ -130,6 +137,12 @@ class PlayerState : IState {
                 }
                 bullets.add(Bullet(pos, dir))
             }
+        }
+    }
+
+    private fun checkGameOver() {
+        if (players.size == 0 && activePlayers != 0) {
+            IOC.put("state", States.GAME_OVER_SCREEN)
         }
     }
 }
