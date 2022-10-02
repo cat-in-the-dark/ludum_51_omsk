@@ -92,7 +92,11 @@ class Player(
             moveTime = 0f
         }
 
-        pos.add(dir.scl(Const.Balance.MAX_PLAYER_SPEED).scl(Gdx.graphics.deltaTime))
+        val delta = dir.scl(Const.Balance.MAX_PLAYER_SPEED).scl(Gdx.graphics.deltaTime)
+        pos.add(delta)
+        if (pos.x < 0 || pos.y < 0 || pos.x + playerWidth > Const.Screen.WIDTH || pos.y + playerHeight > Const.Screen.HEIGHT) {
+            pos.sub(delta)
+        }
     }
 
     private fun draw() {
