@@ -19,3 +19,7 @@ fun ShapeRenderer.polygon2(vertices: List<Vector2>) {
     }.toFloatArray()
     polygon(verticesCoordinates)
 }
+
+fun ShapeRenderer.triangle2(p1: Vector2, p2: Vector2, p3: Vector2) {
+    this.triangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)
+}
