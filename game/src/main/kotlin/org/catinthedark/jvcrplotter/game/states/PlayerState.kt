@@ -51,25 +51,23 @@ class PlayerState : IState {
     private val powerUpsGenerator = PowerUpsGenerator()
     private val tower = Tower(Vector2(Const.Screen.WIDTH / 2f, Const.Screen.HEIGHT / 3f * 2f))
 
+    private var activePlayers = 0
+
     override fun onActivate() {
         logger.info("here!")
         gamepads?.forEach {
             logger.info("Gamepad: ${it.name} ${it.uniqueId}")
-            if (controllers.size >= Const.Balance.MAX_PLAYERS) {
-                return@forEach
-            }
-
             controllers[PlayerControllerGamepad(it)] = false
         }
+        activePlayers = 0
     }
 
     override fun onUpdate() {
         controllers.forEach {
-            if (!it.value) {
-                if (it.key.getDirection().len() > 0.0001) {
-                    players.add(Player(Vector2(0f, 0f), colors[players.size], it.key))
-                    controllers[it.key] = true
-                }
+            if (activePlayers < 4 && !it.value && it.key.getDirection().len() > 0.0001) {
+                players.add(Player(Vector2(0f, 0f), colors[players.size], it.key))
+                controllers[it.key] = true
+                activePlayers++
             }
         }
 
