@@ -32,13 +32,18 @@ object Assets {
         SHOOT_04("sounds/4_sh.wav"),
         SHOOT_05("sounds/5_sh.wav"),
         SHOOT_06("sounds/6_sh.wav"),
+        NOVA_01("sounds/nova/1_SID.wav"),
+        NOVA_02("sounds/nova/2_SID.wav"),
+        NOVA_03("sounds/nova/3_SID.wav"),
+        NOVA_04("sounds/nova/4_SID.wav"),
+        NOVA_05("sounds/nova/5_SID.wav"),
     }
 
     enum class Music(val path: String) {
         BASS("music/4_bass.ogg"),
-        LO_TRASH("music/1_lo-trash.ogg"),
         DREAM("music/3_dream.ogg"),
         HI_TRASH("music/2_hi-trash.ogg"),
+        LO_TRASH("music/1_lo-trash.ogg"),
     }
 }
 

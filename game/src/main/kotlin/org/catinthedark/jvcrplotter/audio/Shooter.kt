@@ -9,33 +9,15 @@ import kotlin.math.roundToInt
 
 
 private const val MAX_PLAYERS = 4
-
 private const val BPM = 94
 
 class Shooter(
     private val am: AssetManager,
-    private val slotsCount: Int = 8,
-    private val beatsPerSlotter: Int = 2,
-    private val eps: Float = 0.05f,
-    private val slotToShoot: Array<Assets.Sounds> = arrayOf(
-        Assets.Sounds.SHOOT_01,
-        Assets.Sounds.SHOOT_02,
-        Assets.Sounds.SHOOT_03,
-        Assets.Sounds.SHOOT_04,
-        Assets.Sounds.SHOOT_05,
-        Assets.Sounds.SHOOT_02,
-        Assets.Sounds.SHOOT_03,
-        Assets.Sounds.SHOOT_04,
-        Assets.Sounds.SHOOT_06,
-        Assets.Sounds.SHOOT_02,
-        Assets.Sounds.SHOOT_03,
-        Assets.Sounds.SHOOT_04,
-        Assets.Sounds.SHOOT_05,
-        Assets.Sounds.SHOOT_02,
-        Assets.Sounds.SHOOT_03,
-        Assets.Sounds.SHOOT_04,
-    )
+    private val slotsCount: Int,
+    private val beatsPerSlotter: Int,
+    private val slotToShoot: List<Assets.Sounds>
 ) {
+    private val eps = 0.1f / beatsPerSlotter
     private val maxSpeed = 1 + log2(slotsCount.toDouble()).roundToInt()
 
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -56,11 +38,14 @@ class Shooter(
         val currentSlot = getCurrentShootingSlot()
 
         if (lastSoundedSlot != currentSlot) {
-            lastSoundedSlot = null
+            if (lastSoundedSlot != null) {
+                lastSoundedSlot = null
+                bulletSlots.clear()
+            }
         }
 
         val shiftedCurrentSlot = currentSlot?.let {
-            (it + player) % slotsCount
+            (it + (player)) % slotsCount
         } ?: return false
 
         check(shiftedCurrentSlot in 0 until slotsCount)
@@ -69,13 +54,14 @@ class Shooter(
             return false
         }
 
-        if (shiftedCurrentSlot % (maxSpeed - speed + 1) != 0) {
+        if (shiftedCurrentSlot % (1 shl (maxSpeed - speed)) != 0) {
             return false
         }
 
         if (lastSoundedSlot != currentSlot) {
             am.at(slotToShoot[currentSlot]).play()
             lastSoundedSlot = currentSlot
+            logger.info("shoot $currentSlot")
         }
         bulletSlots[player] = shiftedCurrentSlot
         return true
@@ -88,7 +74,9 @@ class Shooter(
     }
 
     private fun getCurrentShootingSlot(): Int? {
-        val floatSlot = (slotterProgress + eps / 10).let { if (it >= 1) it - 1 else it }.let { it * slotsCount }
+        val floatSlot = (slotterProgress + eps / 10)
+            .let { if (it >= 1) it - 1 else it }
+            .let { it * slotsCount }
 
         val intSlot = floatSlot.toInt()
 

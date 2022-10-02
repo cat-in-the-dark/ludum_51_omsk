@@ -99,9 +99,9 @@ class PlayerState : IState {
 
         // TODO remove testBgm
         testBgm(Input.Keys.NUM_1, Assets.Music.BASS)
-        testBgm(Input.Keys.NUM_2, Assets.Music.LO_TRASH)
-        testBgm(Input.Keys.NUM_3, Assets.Music.HI_TRASH)
-        testBgm(Input.Keys.NUM_4, Assets.Music.DREAM)
+        testBgm(Input.Keys.NUM_2, Assets.Music.HI_TRASH)
+        testBgm(Input.Keys.NUM_3, Assets.Music.DREAM)
+        testBgm(Input.Keys.NUM_4, Assets.Music.LO_TRASH)
     }
 
     private fun testBgm(key: Int, music: Assets.Music) {

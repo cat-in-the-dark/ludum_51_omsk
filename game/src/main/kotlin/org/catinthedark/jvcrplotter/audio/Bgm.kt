@@ -6,15 +6,40 @@ import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.at
 import org.slf4j.LoggerFactory
 import kotlin.math.abs
-import kotlin.math.log2
-import kotlin.math.roundToInt
 
 private const val DEFAULT_FADE_FORCE = 1.0f
 
 class Bgm(
     private val am: AssetManager
 ) {
-    val bullets = Shooter(am)
+    val bullets = Shooter(
+        am,
+        slotsCount = 8,
+        beatsPerSlotter = 2,
+        slotToShoot = listOf(
+            Assets.Sounds.SHOOT_01,
+            Assets.Sounds.SHOOT_02,
+            Assets.Sounds.SHOOT_03,
+            Assets.Sounds.SHOOT_04,
+            Assets.Sounds.SHOOT_05,
+            Assets.Sounds.SHOOT_02,
+            Assets.Sounds.SHOOT_03,
+            Assets.Sounds.SHOOT_04,
+        )
+    )
+
+    val novas = Shooter(
+        am,
+        slotsCount = 16,
+        beatsPerSlotter = 16,
+        slotToShoot = sequenceOf(
+            IntRange(1, 4).map { Assets.Sounds.NOVA_05 },
+            IntRange(1, 4).map { Assets.Sounds.NOVA_01 },
+            IntRange(1, 4).map { Assets.Sounds.NOVA_02 },
+            IntRange(1, 2).map { Assets.Sounds.NOVA_03 },
+            IntRange(1, 2).map { Assets.Sounds.NOVA_04 },
+        ).flatMap { it }.toList()
+    )
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
