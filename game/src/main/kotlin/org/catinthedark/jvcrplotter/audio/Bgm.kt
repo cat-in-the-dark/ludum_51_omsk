@@ -100,6 +100,12 @@ class Bgm(
         return true
     }
 
+    fun tryShootIf(player: Int, speed: Int, func: () -> Unit) {
+        if (tryShoot(player, speed)) {
+            func()
+        }
+    }
+
     private fun getCurrentShootingSlot(): Int? {
         val floatSlot = (slotterProgress + EPSILON)
             .let { if (it >= 1) it - 1 else it }

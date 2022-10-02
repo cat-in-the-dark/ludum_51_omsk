@@ -5,6 +5,7 @@ import com.badlogic.gdx.controllers.Controllers
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
+import org.catinthedark.jvcrplotter.audio.Bgm
 import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.control.PlayerController
 import org.catinthedark.jvcrplotter.game.control.PlayerControllerArrowKeys
@@ -13,6 +14,7 @@ import org.catinthedark.jvcrplotter.game.control.PlayerControllerWasd
 import org.catinthedark.jvcrplotter.game.entities.*
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.RepeatBarrier
+import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.atOrPut
 import org.catinthedark.jvcrplotter.lib.math.randomDir
 import org.catinthedark.jvcrplotter.lib.states.IState
@@ -29,7 +31,7 @@ class PlayerState : IState {
     )
 
     private val enemiesController = IOC.atOrPut("enemiesController", EnemiesController())
-    private val powerUpsController = PowerUpsController()
+    private val powerUpsController = IOC.atOrPut("powerUpsController", PowerUpsController())
     private val enemyGenerators = listOf(
         EnemyGenerator(Const.Balance.generatorPlaces[0]),
         EnemyGenerator(Const.Balance.generatorPlaces[1]),
@@ -41,21 +43,14 @@ class PlayerState : IState {
     private val gamepads: Array<Controller>? = Controllers.getControllers()
     private val collisionsSystem = CollisionsSystem()
     private val garbageCollectorSystem = GarbageCollectorSystem()
-
+    private val bgm: Bgm by lazy { IOC.atOrFail("bgm") }
     private val powerUpsGenerator = PowerUpsGenerator()
 
-    init {
-        IOC.put("players", players)
-        IOC.put("enemiesController", enemiesController)
-        IOC.put("powerUpsController", powerUpsController)
-    }
-
-    private val cooldown = RepeatBarrier(0.5f)
     private fun spawnBullets() {
-        cooldown.invoke {
-            players.forEach { player ->
+        players.forEachIndexed { playerId, player ->
+            // TODO: shoot only if there ia any enemy in a distance
+            bgm.tryShootIf(playerId, 1) {
                 for (i in 0 until player.stats.bulletsCount) {
-                    // TODO: find closest enemy
                     val dir = randomDir()
                     bullets.add(Bullet(player.pos.cpy(), dir))
                 }
