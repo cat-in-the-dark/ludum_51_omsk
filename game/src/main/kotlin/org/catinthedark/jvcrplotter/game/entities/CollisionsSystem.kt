@@ -1,10 +1,18 @@
 package org.catinthedark.jvcrplotter.game.entities
 
 import com.badlogic.gdx.math.Intersector
+import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.game.entities.powerups.PowerUp
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.atOrFail
 import kotlin.math.pow
+
+fun intersectCircles(center1: Vector2, radius1: Float, center2: Vector2, radius2: Float): Boolean {
+    val dist = center1.dst(center2)
+    val sumR = radius1 + radius2
+    return dist <= sumR
+}
+
 
 class CollisionsSystem {
     fun update() {
@@ -26,7 +34,15 @@ class CollisionsSystem {
 
         enemies.forEach { enemy ->
             players.forEach { player ->
-                // TODO: collide enemies and player
+                if (intersectCircles(
+                        enemy.pos,
+                        enemy.radius,
+                        player.pos,
+                        player.exradius
+                    )
+                ) {
+                    onHitPlayerEnemy(player, enemy)
+                }
             }
 
             bullets.forEach { bullet ->
@@ -42,6 +58,12 @@ class CollisionsSystem {
                     bullet.damage(enemy)
                 }
             }
+        }
+    }
+
+    private fun onHitPlayerEnemy(player: Player, enemy: SimpleEnemy) {
+        enemy.tryHitPlayer(player) {
+            player.hit(enemy.damage)
         }
     }
 }

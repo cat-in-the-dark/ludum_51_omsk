@@ -34,7 +34,7 @@ class EnemyGenerator(
             for (i in 0..count) {
                 val x = bounds.x + Random.nextFloat() * bounds.width
                 val y = bounds.y + Random.nextFloat() * bounds.height
-                val enemy = SimpleEnemy(Vector2(x, y), radius = 20f)
+                val enemy = SimpleEnemy(Vector2(x, y), radius = 20f, damage = 0.5f, hitCooldownTime = 0.1f)
                 controller.registerEnemy(enemy)
             }
         }
