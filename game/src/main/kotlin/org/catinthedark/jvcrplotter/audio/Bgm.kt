@@ -58,7 +58,12 @@ class Bgm(
             am.at(it).apply {
                 volume = 0.0f
                 isLooping = true
+            }
+        }
+        Assets.Music.values().forEach {
+            am.at(it).apply {
                 play()
+                position = am.at(Assets.Music.values()[0]).position
             }
         }
     }
