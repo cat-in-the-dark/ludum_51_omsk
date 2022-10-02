@@ -94,7 +94,7 @@ class Player(
 
         val delta = dir.scl(Const.Balance.MAX_PLAYER_SPEED).scl(Gdx.graphics.deltaTime)
         pos.add(delta)
-        if (pos.x < 0 || pos.y < 0 || pos.x + playerWidth > Const.Screen.WIDTH || pos.y + playerHeight > Const.Screen.HEIGHT) {
+        if (pos.x < 0 || pos.y < 0 || pos.x + width > Const.Screen.WIDTH || pos.y + height > Const.Screen.HEIGHT) {
             pos.sub(delta)
         }
     }
