@@ -22,7 +22,7 @@ class Tower(override val pos: Vector2, override var shouldDestroy: Boolean = fal
         pos.x, pos.y - Const.Balance.Tower.VISUAL_HEIGHT
     )
 
-    var currentHP = Const.Balance.Tower.RADIUS
+    var currentHP = Const.Balance.Tower.MAX_HP
     private val beaconPoint = topPoint.cpy().add(0f, -65f)
     private val beaconTop = beaconPoint.cpy().add(0f, 30f)
     private val beaconBottom = beaconPoint.cpy().add(0f, -30f)
