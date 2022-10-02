@@ -65,7 +65,7 @@ class PlayerState : IState {
     override fun onUpdate() {
         controllers.forEach {
             if (activePlayers < 4 && !it.value && it.key.getDirection().len() > 0.0001) {
-                players.add(Player(Vector2(0f, 0f), colors[players.size], it.key))
+                players.add(Player(Vector2(0f, 0f), colors[activePlayers], it.key))
                 controllers[it.key] = true
                 activePlayers++
             }

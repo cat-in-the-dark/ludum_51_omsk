@@ -9,8 +9,10 @@ class GarbageCollectorSystem : IUpdatable {
     override fun update() {
         val enemies: MutableList<IDestructible> = IOC.atOrFail("enemies")
         val bullets: MutableList<IDestructible> = IOC.atOrFail("bullets")
+        val players: MutableList<IDestructible> = IOC.atOrFail("players")
 
         enemies.removeIf { it.shouldDestroy }
         bullets.removeIf { it.shouldDestroy }
+        players.removeIf { it.shouldDestroy }
     }
 }

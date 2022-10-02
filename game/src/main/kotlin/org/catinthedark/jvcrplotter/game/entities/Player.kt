@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.MathUtils.cos
-import com.badlogic.gdx.math.MathUtils.sin
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.game.Const
@@ -14,11 +13,13 @@ import org.catinthedark.jvcrplotter.game.control.PlayerController
 import org.catinthedark.jvcrplotter.lib.IOC
 import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.interfaces.ICollisionRect
+import org.catinthedark.jvcrplotter.lib.interfaces.IDestructible
 import org.catinthedark.jvcrplotter.lib.interfaces.ITransform
 import org.catinthedark.jvcrplotter.lib.managed
 import org.catinthedark.jvcrplotter.lib.triangle2
 import org.slf4j.LoggerFactory
 import kotlin.math.max
+import kotlin.math.pow
 
 data class Stats(var bulletsCount: Int, var maxHP: Float)
 
@@ -26,8 +27,8 @@ class Player(
     override val pos: Vector2,
     private val color: Color,
     private val controller: PlayerController,
-    val stats: Stats = Stats(bulletsCount = 1, maxHP = 16f),
-) : ITransform, ICollisionRect {
+    val stats: Stats = Stats(bulletsCount = 1, maxHP = 16f), override var shouldDestroy: Boolean = false,
+) : ITransform, ICollisionRect, IDestructible {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val render: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
 
@@ -42,6 +43,7 @@ class Player(
 
     private var isMoving = false
     private var moveTime = 0f
+    private var fallTime = 0f
 
     val p1: Vector2
         get() = Vector2(pos.x + playerWidth / 2, pos.y)
@@ -111,10 +113,33 @@ class Player(
         Gdx.gl.glDisable(GL20.GL_BLEND)
     }
 
+    private fun drawFallAnimation() {
+        val p2Cached = p2
+        val p3Cached = p3
+        val p1Cached = p1
+
+        val fallProgress = MathUtils.clamp(fallTime.toDouble().pow(4.0).toFloat(), 0f, 1f);
+        val rotation = MathUtils.map(0f, 1f, 0f, 75f, fallProgress)
+        val p1NewPos = p1Cached.cpy().sub(p2Cached).rotateDeg(rotation).add(p2Cached)
+
+        render.managed(ShapeRenderer.ShapeType.Line) {
+            it.color = color
+            it.triangle2(p1NewPos, p2Cached, p3Cached)
+        }
+    }
+
     fun update() {
         time += Gdx.graphics.deltaTime
-        updatePos()
-        draw()
+        if (currentHP > 0) {
+            updatePos()
+            draw()
+        } else {
+            fallTime += Gdx.graphics.deltaTime
+            drawFallAnimation()
+            if (fallTime >= 1.5f) {
+                shouldDestroy = true
+            }
+        }
     }
 
     override fun getCollisionRect(): Rectangle {
@@ -125,7 +150,6 @@ class Player(
         logger.info("HIT dmg=$damage hp=$currentHP")
         currentHP -= damage
         if (currentHP <= 0) {
-            // TODO: die
             logger.info("DIED FROM CRINGE")
             currentHP = 0f
         }
