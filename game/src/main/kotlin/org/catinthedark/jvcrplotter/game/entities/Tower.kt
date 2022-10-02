@@ -6,13 +6,10 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.jvcrplotter.game.Const
-import org.catinthedark.jvcrplotter.lib.IOC
-import org.catinthedark.jvcrplotter.lib.atOrFail
+import org.catinthedark.jvcrplotter.lib.*
 import org.catinthedark.jvcrplotter.lib.interfaces.IDestructible
 import org.catinthedark.jvcrplotter.lib.interfaces.ITransform
 import org.catinthedark.jvcrplotter.lib.interfaces.IUpdatable
-import org.catinthedark.jvcrplotter.lib.managed
-import org.catinthedark.jvcrplotter.lib.polygon2
 import org.slf4j.LoggerFactory
 
 class Tower(override val pos: Vector2, override var shouldDestroy: Boolean = false) : ITransform, IUpdatable,
@@ -59,8 +56,16 @@ class Tower(override val pos: Vector2, override var shouldDestroy: Boolean = fal
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         render.managed(ShapeRenderer.ShapeType.Filled) {
             val color = Color.FIREBRICK
-            color.a = 0.3f
+            color.a = 0.5f
             it.color = color
+
+            val hpScale = 1f - currentHP / Const.Balance.Tower.MAX_HP
+
+            val p2Hp = p2Cached.cpy().sub(topPoint).scl(hpScale).add(topPoint)
+            val p3Hp = p3Cached.cpy().sub(topPoint).scl(hpScale).add(topPoint)
+            it.triangle2(p2Hp, p2Cached, p3Cached)
+            it.triangle2(p2Hp, p3Hp, p3Cached)
+
             it.triangle(
                 p1Cached.x,
                 p1Cached.y,
