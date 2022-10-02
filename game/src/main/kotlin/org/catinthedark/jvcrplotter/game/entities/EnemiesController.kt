@@ -18,10 +18,11 @@ class EnemiesController {
     fun update() {
         // TODO: get attractor
         enemies.forEach { enemy ->
-            findClosest(enemy, players + tower)?.let {
-                if (it.second < Const.Balance.MAX_FOLLOW_DIST) {
-                    enemy.follow(it.first)
-                }
+            val closestPlayer = findClosest(enemy, players)
+            if (closestPlayer != null && closestPlayer.second < Const.Balance.MAX_FOLLOW_DIST) {
+                enemy.follow(closestPlayer.first)
+            } else {
+                enemy.follow(tower)
             }
             enemy.update()
         }

@@ -16,11 +16,16 @@ object Const {
         const val MAX_FOLLOW_DIST = 600
         const val MAX_SHOOT_DIST = 500
 
+        const val SPAWNS_H_WIDTH = Screen.WIDTH + 16f
+        const val SPAWNS_H_HEIGHT = 64f
+        const val SPAWNS_V_WIDTH = 64f
+        const val SPAWNS_V_HEIGHT = Screen.HEIGHT + 16f
+
         val generatorPlaces = listOf(
-            Rectangle(5f, 5f, 1270f, 64f),
-            Rectangle(5f, 715f - 64f, 1270f, 64f),
-            Rectangle(5f, 72f, 64f, 700f),
-            Rectangle(1211f, 72f, 64f, 700f),
+            Rectangle((Screen.WIDTH - SPAWNS_H_WIDTH) / 2f, -SPAWNS_H_HEIGHT - 1f, SPAWNS_H_WIDTH, SPAWNS_H_HEIGHT),
+            Rectangle((Screen.WIDTH - SPAWNS_H_WIDTH) / 2f, Screen.HEIGHT + 1f, SPAWNS_H_WIDTH, SPAWNS_H_HEIGHT),
+            Rectangle(-SPAWNS_V_WIDTH - 1f, (Screen.HEIGHT - SPAWNS_V_HEIGHT) / 2f, SPAWNS_V_WIDTH, SPAWNS_V_HEIGHT),
+            Rectangle(Screen.WIDTH + 1f, (Screen.HEIGHT - SPAWNS_V_HEIGHT) / 2f, SPAWNS_V_WIDTH, SPAWNS_V_HEIGHT),
         )
 
         object Spawn {
