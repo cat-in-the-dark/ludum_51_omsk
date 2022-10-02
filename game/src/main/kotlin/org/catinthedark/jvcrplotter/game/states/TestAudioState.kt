@@ -18,7 +18,7 @@ class TestAudioState : IState {
 
     private var currentTime = 0f
 
-    private var bgmActiveLayers = 0;
+    private var bgmActiveLayers = 0
 
     override fun onActivate() {
         currentTime = 0f
@@ -41,9 +41,20 @@ class TestAudioState : IState {
             am.at(Assets.Sounds.POWERUP).play()
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
             am.at(Assets.Sounds.POWERUP).play()
         }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) bgm.tryShoot(0, 1)
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) bgm.tryShoot(0, 2)
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_3)) bgm.tryShoot(0, 3)
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_4)) bgm.tryShoot(0, 4)
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_5)) bgm.tryShoot(1, 1)
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_6)) bgm.tryShoot(1, 2)
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_7)) bgm.tryShoot(1, 3)
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_8)) bgm.tryShoot(1, 4)
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_9)) bgm.tryShoot(2, 1)
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_0)) bgm.tryShoot(2, 2)
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             ++bgmActiveLayers
