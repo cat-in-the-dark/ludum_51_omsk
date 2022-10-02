@@ -2,11 +2,9 @@ package org.catinthedark.jvcrplotter.game.states
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.Controllers
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.utils.Array
 import org.catinthedark.jvcrplotter.audio.Bgm
 import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.Const
@@ -41,7 +39,6 @@ class PlayerState : IState {
     private val enemyGenerators = mutableListOf<EnemyGenerator>()
     private val bullets: MutableList<Bullet> = IOC.atOrPut("bullets", mutableListOf())
     private val players: MutableList<Player> = IOC.atOrPut("players", mutableListOf())
-    private val gamepads: Array<Controller>? = Controllers.getControllers()
     private val collisionsSystem = CollisionsSystem()
     private val garbageCollectorSystem = GarbageCollectorSystem()
     private val bgm: Bgm by lazy { IOC.atOrFail("bgm") }
@@ -50,11 +47,18 @@ class PlayerState : IState {
 
     private var activePlayers = 0
 
-    override fun onActivate() {
-        logger.info("here!")
-        gamepads?.forEach {
+    init {
+        Controllers.getControllers()?.forEach {
             logger.info("Gamepad: ${it.name} ${it.uniqueId}")
             controllers[PlayerControllerGamepad(it)] = false
+        }
+    }
+
+    override fun onActivate() {
+        logger.info("here!")
+
+        controllers.forEach {
+            controllers[it.key] = false
         }
         activePlayers = 0
         bullets.clear()
@@ -90,6 +94,7 @@ class PlayerState : IState {
         bgm.update()
 
         checkGameOver()
+        checkRestart()
 
         // TODO remove testBgm
         testBgm(Input.Keys.NUM_1, Assets.Music.BASS)
@@ -140,6 +145,12 @@ class PlayerState : IState {
     private fun checkGameOver() {
         if (players.size == 0 && activePlayers != 0) {
             IOC.put("state", States.GAME_OVER_SCREEN)
+        }
+    }
+
+    private fun checkRestart() {
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            IOC.put("state", States.TITLE_SCREEN)
         }
     }
 }

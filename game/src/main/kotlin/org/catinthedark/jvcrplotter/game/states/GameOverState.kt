@@ -1,11 +1,10 @@
 package org.catinthedark.jvcrplotter.game.states
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.scenes.scene2d.Stage
-import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.States
 import org.catinthedark.jvcrplotter.game.control.PlayerController
 import org.catinthedark.jvcrplotter.lib.IOC
@@ -31,6 +30,10 @@ class GameOverState : IState {
             if (controller.value && controller.key.isStartPressed()) {
                 IOC.put("state", States.PLAYER_SCREEN)
             }
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            IOC.put("state", States.PLAYER_SCREEN)
         }
     }
 
