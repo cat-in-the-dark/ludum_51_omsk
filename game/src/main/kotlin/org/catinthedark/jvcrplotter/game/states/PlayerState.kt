@@ -125,8 +125,8 @@ class PlayerState : IState {
         bgm.bullets.tryShootIf(playerId, player.stats.bulletsFireSpeed) {
             for (i in 0 until player.stats.bulletsCount) {
                 val target = targets[i % targets.size]
-                val dir = target.first.pos.cpy().sub(player.center).nor()
-                val pos = player.pos.cpy()
+                val dir = target.first.center.cpy().sub(player.p1).nor()
+                val pos = player.p1.cpy()
                 if (i >= targets.size) {
                     val jitter = randomDir().scl(2f)
                     pos.add(jitter)

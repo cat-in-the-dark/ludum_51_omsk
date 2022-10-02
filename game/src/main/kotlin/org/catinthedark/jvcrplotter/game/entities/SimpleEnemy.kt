@@ -5,10 +5,13 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Vector2
-import org.catinthedark.jvcrplotter.lib.*
+import org.catinthedark.jvcrplotter.lib.CoolDown
+import org.catinthedark.jvcrplotter.lib.IOC
+import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.interfaces.IDestructible
 import org.catinthedark.jvcrplotter.lib.interfaces.ITransform
 import org.catinthedark.jvcrplotter.lib.interfaces.IUpdatable
+import org.catinthedark.jvcrplotter.lib.managed
 import org.catinthedark.jvcrplotter.lib.math.randomDir
 
 class SimpleEnemy(
@@ -27,6 +30,9 @@ class SimpleEnemy(
 
     val body: Circle
         get() = Circle(pos.x, pos.y, radius)
+
+    val center: Vector2
+        get() = Vector2(pos.x + radius / 2f, pos.y + radius / 2f)
 
     fun follow(target: ITransform) {
         this.target = target
