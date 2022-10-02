@@ -36,6 +36,9 @@ class PlayerState : IState {
 
     private var activePlayers = 0
 
+    private val bossesCount: Int
+        get() = enemies.count { it.isBoss }
+
     override fun onActivate() {
         logger.info("here!")
 
@@ -77,7 +80,7 @@ class PlayerState : IState {
         powerUpsController.update()
         tower.update()
         bgm.update()
-        bgm.updateLayers(playersCount = players.size, bossesCount = 0) // TODO: use actual values
+        bgm.updateLayers(playersCount = players.size, bossesCount = bossesCount) // TODO: use actual values
 
         checkGameOver()
         checkRestart()

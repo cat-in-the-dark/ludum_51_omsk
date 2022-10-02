@@ -28,8 +28,8 @@ class PowerUpsGenerator {
             val powerUps = powerUpsPool.asSequence().shuffled().take(count).toList()
             for (i in 0 until count) {
                 // TODO: don't spawn powerUp inside tower
-                val x = Random.nextFloat() * Const.Screen.WIDTH
-                val y = Random.nextFloat() * Const.Screen.HEIGHT
+                val x = (Random.nextFloat() * Const.Screen.WIDTH).coerceIn(32f, Const.Screen.WIDTH - 32f)
+                val y = (Random.nextFloat() * Const.Screen.HEIGHT).coerceIn(32f, Const.Screen.HEIGHT - 32f)
                 val powerUp = createPowerUp(powerUps[i], Vector2(x, y))
                 controller.addPowerUp(powerUp)
             }
