@@ -31,6 +31,11 @@ object Const {
         object PowerUp {
             const val TIMEOUT = 10f
         }
+
+        object Tower {
+            const val RADIUS = 60f
+            const val VISUAL_HEIGHT = 180f
+        }
     }
 
     object UI {

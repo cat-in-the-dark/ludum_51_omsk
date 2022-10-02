@@ -13,7 +13,6 @@ import org.catinthedark.jvcrplotter.game.control.PlayerControllerGamepad
 import org.catinthedark.jvcrplotter.game.control.PlayerControllerWasd
 import org.catinthedark.jvcrplotter.game.entities.*
 import org.catinthedark.jvcrplotter.lib.IOC
-import org.catinthedark.jvcrplotter.lib.RepeatBarrier
 import org.catinthedark.jvcrplotter.lib.atOrFail
 import org.catinthedark.jvcrplotter.lib.atOrPut
 import org.catinthedark.jvcrplotter.lib.math.randomDir
@@ -45,6 +44,7 @@ class PlayerState : IState {
     private val garbageCollectorSystem = GarbageCollectorSystem()
     private val bgm: Bgm by lazy { IOC.atOrFail("bgm") }
     private val powerUpsGenerator = PowerUpsGenerator()
+    private val tower = Tower(Vector2(Const.Screen.WIDTH / 2f, Const.Screen.HEIGHT / 3f * 2f))
 
     private fun spawnBullets() {
         players.forEachIndexed { playerId, player ->
@@ -93,6 +93,7 @@ class PlayerState : IState {
         enemyGenerators.forEach { it.update() } // TODO: update only for online players
         powerUpsGenerator.update()
         powerUpsController.update()
+        tower.update()
     }
 
     override fun onExit() {
