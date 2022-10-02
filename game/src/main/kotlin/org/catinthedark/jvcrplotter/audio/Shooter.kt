@@ -61,7 +61,6 @@ class Shooter(
         if (lastSoundedSlot != currentSlot) {
             am.at(slotToShoot[currentSlot]).play()
             lastSoundedSlot = currentSlot
-            logger.info("shoot $currentSlot")
         }
         bulletSlots[player] = shiftedCurrentSlot
         return true
