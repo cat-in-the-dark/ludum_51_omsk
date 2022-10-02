@@ -1,11 +1,14 @@
 package org.catinthedark.jvcrplotter.game.states
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.Controllers
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import org.catinthedark.jvcrplotter.audio.Bgm
+import org.catinthedark.jvcrplotter.game.Assets
 import org.catinthedark.jvcrplotter.game.Const
 import org.catinthedark.jvcrplotter.game.control.PlayerController
 import org.catinthedark.jvcrplotter.game.control.PlayerControllerArrowKeys
@@ -84,6 +87,21 @@ class PlayerState : IState {
         powerUpsGenerator.update()
         powerUpsController.update()
         tower.update()
+        bgm.update()
+
+        // TODO remove testBgm
+        testBgm(Input.Keys.NUM_1, Assets.Music.BASS)
+        testBgm(Input.Keys.NUM_2, Assets.Music.LO_TRASH)
+        testBgm(Input.Keys.NUM_3, Assets.Music.HI_TRASH)
+        testBgm(Input.Keys.NUM_4, Assets.Music.DREAM)
+    }
+
+    private fun testBgm(key: Int, music: Assets.Music) {
+        if (Gdx.input.isKeyPressed(key)) {
+            bgm.fadeIn(music)
+        } else {
+            bgm.fadeOut(music)
+        }
     }
 
     override fun onExit() {
