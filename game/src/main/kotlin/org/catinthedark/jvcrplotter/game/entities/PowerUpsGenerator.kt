@@ -16,7 +16,7 @@ class PowerUpsGenerator {
     private val repeater = RepeatBarrier(0f, Const.Balance.PowerUp.TIMEOUT)
     private val controller: PowerUpsController by lazy { IOC.atOrFail("powerUpsController") }
 
-    private val powerUpsPool = listOf("fire", "nova", "fire", "fire")
+    private val powerUpsPool = listOf("fire", "nova", "nova", "fire")
 
     private var time = 0f
 

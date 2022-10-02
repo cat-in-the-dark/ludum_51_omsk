@@ -99,7 +99,6 @@ class Tower(override val pos: Vector2, override var shouldDestroy: Boolean = fal
 
     fun hit(damage: Float) {
         currentHP -= damage
-        logger.info("DMG ${damage}, HP $currentHP")
         if (currentHP <= 0) {
             currentHP = 0f
         }
