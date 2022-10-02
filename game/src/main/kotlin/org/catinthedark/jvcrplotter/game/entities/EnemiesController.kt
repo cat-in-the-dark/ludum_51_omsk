@@ -9,6 +9,7 @@ import org.catinthedark.jvcrplotter.lib.math.findClosest
 class EnemiesController {
     private val enemies: MutableList<SimpleEnemy> = IOC.atOrPut("enemies", mutableListOf())
     private val players: List<Player> by lazy { IOC.atOrFail("players") }
+    private val tower: Tower by lazy { IOC.atOrFail("tower") }
 
     fun registerEnemy(enemy: SimpleEnemy) {
         enemies.add(enemy)
@@ -17,7 +18,7 @@ class EnemiesController {
     fun update() {
         // TODO: get attractor
         enemies.forEach { enemy ->
-            findClosest(enemy, players)?.let {
+            findClosest(enemy, players + tower)?.let {
                 if (it.second < Const.Balance.MAX_FOLLOW_DIST) {
                     enemy.follow(it.first)
                 }

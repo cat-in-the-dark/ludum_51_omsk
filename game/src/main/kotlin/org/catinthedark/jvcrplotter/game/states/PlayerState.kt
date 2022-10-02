@@ -49,7 +49,7 @@ class PlayerState : IState {
     private val garbageCollectorSystem = GarbageCollectorSystem()
     private val bgm: Bgm by lazy { IOC.atOrFail("bgm") }
     private val powerUpsGenerator = PowerUpsGenerator()
-    private val tower = Tower(Vector2(Const.Screen.WIDTH / 2f, Const.Screen.HEIGHT / 3f * 2f))
+    private val tower = IOC.atOrPut("tower", Tower(Vector2(Const.Screen.WIDTH / 2f, Const.Screen.HEIGHT / 3f * 2f)))
 
     private var activePlayers = 0
 
