@@ -7,6 +7,7 @@ import org.catinthedark.alyoep.game.entities.powerups.PowerUp
 import org.catinthedark.alyoep.lib.IOC
 import org.catinthedark.alyoep.lib.atOrFail
 import org.slf4j.LoggerFactory
+import kotlin.math.min
 import kotlin.math.pow
 
 fun intersectCircles(center1: Vector2, radius1: Float, center2: Vector2, radius2: Float): Boolean {
@@ -69,6 +70,15 @@ class CollisionsSystem {
                 it.apply(player)
             }
             powerUps.removeAll(collidedPowerUps)
+
+            players.forEach { other ->
+                player.healNova?.apply {
+                    if (other.healAnimationTime <= 0.01f && intersectTriangleCircle(p1, p2, p3, other.center, other.width)) {
+                        other.playHealAnimation = true
+                        other.currentHP = min(other.stats.maxHP, other.currentHP + other.stats.maxHP / 2f)
+                    }
+                }
+            }
         }
 
         enemies.forEach { enemy ->

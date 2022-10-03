@@ -13,18 +13,13 @@ import kotlin.math.min
 
 class HealPowerUp(override var pos: Vector2) : PowerUp(pos, Color.LIME) {
     private val bgm: Bgm by lazy { IOC.atOrFail("bgm") }
-    private val players: List<Player> = IOC.atOrFail("players")
     private val tower: Tower = IOC.atOrFail("tower")
 
     override fun apply(player: Player) {
-        players.forEach {
-            it.currentHP = min(it.stats.maxHP, it.currentHP + it.stats.maxHP / 2f)
-        }
-
         tower.currentHP = min(Const.Balance.Tower.MAX_HP, tower.currentHP + Const.Balance.Tower.MAX_HP / 2f)
 
         bgm.collectPowerup(true)
 
-        player.healNova = HealNova(player.center.cpy(), player.height)
+        player.healNova = HealNova(tower.pos, player.height)
     }
 }

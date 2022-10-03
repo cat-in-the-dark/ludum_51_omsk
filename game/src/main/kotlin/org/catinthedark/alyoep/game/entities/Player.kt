@@ -48,6 +48,12 @@ class Player(
     ),
     override var shouldDestroy: Boolean = false,
 ) : ITransform, ICollisionRect, IDestructible {
+    var playHealAnimation: Boolean = false
+        set(value) {
+            field = value
+            healAnimationTime = 0f
+        }
+    var healAnimationTime: Float = 0f
     private val logger = LoggerFactory.getLogger(javaClass)
     private val render: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
 
@@ -135,6 +141,30 @@ class Player(
             val p3Hp = p3Cached.cpy().sub(p1Cached).scl(hpScale).add(p1Cached)
             it.triangle2(p2Hp, p2Cached, p3Cached)
             it.triangle2(p2Hp, p3Hp, p3Cached)
+
+            if (playHealAnimation) {
+                val colorBottom = Color(Color.CHARTREUSE)
+                val colorTop = Color(Color.CHARTREUSE)
+                colorTop.a = 0f
+
+                val effectHeight = height * 2
+                val tm = healAnimationTime * 1.5f
+                val heightProgress = MathUtils.clamp(tm, 0f, 1f).pow(1f / 2) * effectHeight
+                val alphaProgress = MathUtils.map(0f, 1f, 1f, 0f, MathUtils.clamp(tm, 0f, 1f).pow(3f))
+
+                colorBottom.a = alphaProgress
+
+                it.rect(
+                    p2Cached.x,
+                    p2Cached.y - heightProgress,
+                    width,
+                    heightProgress,
+                    colorTop,
+                    colorTop,
+                    colorBottom,
+                    colorBottom
+                )
+            }
         }
         Gdx.gl.glDisable(GL20.GL_BLEND)
     }
@@ -172,6 +202,12 @@ class Player(
 
     fun update() {
         time += Gdx.graphics.deltaTime
+        if (playHealAnimation) {
+            healAnimationTime += Gdx.graphics.deltaTime
+            if (healAnimationTime > 1.0f) {
+                playHealAnimation = false
+            }
+        }
         updateNova()
         if (currentHP > 0) {
             updatePos()
