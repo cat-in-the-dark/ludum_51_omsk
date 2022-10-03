@@ -20,12 +20,20 @@ class PowerUpsGenerator {
     private val powerUpsPool = listOf("fire", "fire", "fire", "nova", "nova", "heal")
 
     private var time = 0f
+    private var round = 0
 
     fun update() {
         time += Gdx.graphics.deltaTime
         repeater.invoke {
             val count = players.size
-            val powerUps = powerUpsPool.asSequence().shuffled().take(count).toList()
+            val pool = if (round < 3) {
+                powerUpsPool.filter { it != "heal" }
+            } else {
+                powerUpsPool
+            }
+
+            val powerUps = pool.asSequence().shuffled().take(count).toList()
+            round++
             for (i in 0 until count) {
                 // TODO: don't spawn powerUp inside tower
                 val x = (Random.nextFloat() * Const.Screen.WIDTH).coerceIn(32f, Const.Screen.WIDTH - 32f)
