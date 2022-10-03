@@ -3,6 +3,7 @@ package org.catinthedark.alyoep.game.states
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -31,6 +32,7 @@ class TitleScreenState : IState {
 
     override fun onActivate() {
         currentTime = 0f
+        drawNextBarrier.reset()
     }
 
     override fun onUpdate() {
@@ -42,6 +44,7 @@ class TitleScreenState : IState {
         currentTime += Gdx.graphics.deltaTime
         drawNextBarrier.invoke {
             render.managed(ShapeRenderer.ShapeType.Line) {
+                it.color = Color.WHITE
                 val spacePos = Vector2(
                     Const.Screen.WIDTH / 2f - (TutorialState.Dimensions.SPACE_WIDTH + TutorialState.Dimensions.ARROW_WIDTH + 2 * TutorialState.Dimensions.BUTTON_SPACING) / 2,
                     Const.Screen.HEIGHT - 100f
