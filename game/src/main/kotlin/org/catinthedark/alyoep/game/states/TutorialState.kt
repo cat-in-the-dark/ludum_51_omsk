@@ -85,7 +85,7 @@ class TutorialState : IState {
         inputController = TutorialInputController()
         showNextBarrier.reset()
 
-        player = Player(spawnPos.cpy(), Color.CHARTREUSE, inputController)
+        player = Player(spawnPos.cpy().add(0f, 200f), Color.CHARTREUSE, inputController)
         player.currentHP = player.stats.maxHP * 0.5f
         players.clear()
         players.add(player)
