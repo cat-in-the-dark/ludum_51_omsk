@@ -1,0 +1,51 @@
+package org.catinthedark.alyoep.game.states
+
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.scenes.scene2d.Stage
+import org.catinthedark.alyoep.audio.Bgm
+import org.catinthedark.alyoep.game.Assets
+import org.catinthedark.alyoep.game.States
+import org.catinthedark.alyoep.game.control.PlayerController
+import org.catinthedark.alyoep.game.texture
+import org.catinthedark.alyoep.lib.IOC
+import org.catinthedark.alyoep.lib.atOrFail
+import org.catinthedark.alyoep.lib.managed
+import org.catinthedark.alyoep.lib.states.IState
+
+class TitleScreenState : IState {
+    private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
+    private val am: AssetManager by lazy { IOC.atOrFail<AssetManager>("assetManager") }
+    private val bgm: Bgm by lazy { IOC.atOrFail("bgm") }
+    private val controllers: Map<PlayerController, Boolean> = IOC.atOrFail("input")
+
+    private var currentTime = 0f
+
+    override fun onActivate() {
+        currentTime = 0f
+        IOC.put("showTutorial", true)
+    }
+
+    override fun onUpdate() {
+        bgm.update()
+        hud.batch.managed { b ->
+            b.draw(am.texture(Assets.Names.TITLE), 0f, 0f)
+        }
+
+        for (controller in controllers) {
+            if (controller.key.isStartPressed()) {
+                IOC.put("state", States.PLAYER_SCREEN)
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) ||
+            Gdx.input.isKeyPressed(Input.Keys.ENTER) ||
+            Gdx.input.isKeyPressed(Input.Keys.P)
+        ) {
+            IOC.put("state", States.PLAYER_SCREEN)
+        }
+    }
+
+    override fun onExit() {
+    }
+}

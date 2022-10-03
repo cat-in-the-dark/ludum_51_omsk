@@ -13,7 +13,7 @@ repositories {
 }
 
 application {
-    mainClassName = "org.catinthedark.jvcrplotter.desktop.DesktopLauncher"
+    mainClassName = "org.catinthedark.alyoep.desktop.DesktopLauncher"
 }
 
 tasks.withType<KotlinCompile> {
