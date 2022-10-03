@@ -8,8 +8,9 @@ object DesktopLauncher {
     @JvmStatic
     fun main(args: Array<String>) {
         val config = Lwjgl3ApplicationConfiguration()
-        config.setTitle("Drop")
+        config.setTitle("ALYOEP")
         config.setWindowedMode(800, 480)
+        config.setMaximized(true)
         config.useVsync(true)
         config.setForegroundFPS(60)
         config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 2)
