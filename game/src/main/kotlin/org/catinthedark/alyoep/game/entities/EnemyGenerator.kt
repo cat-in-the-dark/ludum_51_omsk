@@ -9,12 +9,16 @@ import com.badlogic.gdx.math.Vector2
 import org.catinthedark.alyoep.game.Const
 import org.catinthedark.alyoep.game.Const.Balance.Spawn.MAX_SPAWN
 import org.catinthedark.alyoep.game.Const.Balance.Spawn.SIN_TIME_SCALE
-import org.catinthedark.alyoep.lib.*
+import org.catinthedark.alyoep.lib.IOC
+import org.catinthedark.alyoep.lib.RepeatBarrier
+import org.catinthedark.alyoep.lib.atOrFail
+import org.catinthedark.alyoep.lib.managed
 import org.slf4j.LoggerFactory
 import kotlin.random.Random
 
 class EnemyGenerator(
-    private val bounds: Rectangle
+    private val bounds: Rectangle,
+    private val demoMode: Boolean = false
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val renderer: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
@@ -24,12 +28,30 @@ class EnemyGenerator(
     private var time: Float = 0f
     private var oldWaveNumber: Int = 0
 
+    var demoWaveNumber: Int = 1
+
     fun update() {
         time += Gdx.graphics.deltaTime
         repeater.invoke {
             val fixedTime = time / SIN_TIME_SCALE
-            val spawn = MathUtils.map(-1f, 1f, 0f, 1f, MathUtils.sin(fixedTime))
-            val waveNumber = MathUtils.ceil(fixedTime / MathUtils.PI2)
+            val minSpawn = if (demoMode) {
+                0.2f
+            } else {
+                0f
+            }
+            val maxSpawn = if (demoMode) {
+                0.5f
+            } else {
+                1f
+            }
+            val spawn = MathUtils.map(-1f, 1f, minSpawn, maxSpawn, MathUtils.sin(fixedTime))
+
+            val waveNumber = if (demoMode) {
+                demoWaveNumber
+            } else {
+                MathUtils.ceil(fixedTime / MathUtils.PI2)
+            }
+
             val count = MathUtils.round(waveNumber * spawn * MAX_SPAWN)
 
             val minSpeed = 50f

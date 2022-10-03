@@ -22,6 +22,7 @@ class SplashScreenState : IState {
 
     override fun onActivate() {
         time = 0f
+        IOC.put("showTutorial", true)
     }
 
     override fun onUpdate() {

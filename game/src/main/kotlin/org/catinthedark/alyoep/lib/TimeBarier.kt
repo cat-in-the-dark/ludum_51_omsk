@@ -56,6 +56,7 @@ class RepeatBarrier(
 ) : ITimeBarrier {
     private var time = 0f
     private var called = false
+    var count = 0
 
     override fun invoke(func: () -> Unit) {
         time += delta()
@@ -63,11 +64,13 @@ class RepeatBarrier(
             if (time >= interval) {
                 time = 0f
                 func()
+                count++
             }
         } else {
             if (time >= after) {
                 time = 0f
                 func()
+                count++
                 called = true
             }
         }
@@ -76,6 +79,7 @@ class RepeatBarrier(
 
     override fun reset() {
         time = 0f
+        count = 0
         called = false
     }
 }

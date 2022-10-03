@@ -47,6 +47,7 @@ class MainGame : Game() {
                 States.SPLASH_SCREEN to SplashScreenState(),
                 States.PLAYER_SCREEN to PlayerState(),
                 States.TITLE_SCREEN to TitleScreenState(),
+                States.TUTORIAL_SCREEN to TutorialState(),
                 States.GAME_OVER_SCREEN to GameOverState(),
                 States.TEST_AUDIO_SCREEN to TestAudioState(),
             )
@@ -63,6 +64,7 @@ class MainGame : Game() {
         IOC.put("deffer", DefferImpl())
         IOC.put("stage", stage)
         IOC.put("hud", hud)
+        IOC.put("showTutorial", true)
         IOC.put("shapeRenderer", shapeRenderer)
         IOC.put("state", States.SPLASH_SCREEN)
 

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.Vector2
 
-class PlayerControllerWasd : PlayerController {
+class PlayerControllerWasd : PlayerController() {
     override fun getDirection(): Vector2 {
         val vertical = if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             -1f

@@ -11,6 +11,7 @@ import org.catinthedark.alyoep.game.States
 import org.catinthedark.alyoep.game.control.PlayerController
 import org.catinthedark.alyoep.game.entities.*
 import org.catinthedark.alyoep.lib.IOC
+import org.catinthedark.alyoep.lib.at
 import org.catinthedark.alyoep.lib.atOrFail
 import org.catinthedark.alyoep.lib.atOrPut
 import org.catinthedark.alyoep.lib.math.randomDir
@@ -22,7 +23,7 @@ class PlayerState : IState {
 
     private val colors = listOf(Color.CORAL, Color.CHARTREUSE, Color.GOLDENROD, Color.ROYAL)
     private val controllers: MutableMap<PlayerController, Boolean> by lazy { IOC.atOrFail("input") }
-    private val enemiesController = IOC.atOrPut("enemiesController", EnemiesController())
+    private lateinit var enemiesController: EnemiesController
     private val enemies: MutableList<SimpleEnemy> by lazy { IOC.atOrFail("enemies") }
     private val powerUpsController = IOC.atOrPut("powerUpsController", PowerUpsController())
     private val enemyGenerators = mutableListOf<EnemyGenerator>()
@@ -40,11 +41,12 @@ class PlayerState : IState {
         get() = enemies.count { it.isBoss }
 
     override fun onActivate() {
-        logger.info("here!")
-
         powerUpsGenerator = PowerUpsGenerator()
         tower = Tower(Vector2(Const.Screen.WIDTH / 2f, Const.Screen.HEIGHT / 3f * 2f))
         IOC.put("tower", tower)
+        enemiesController = EnemiesController()
+        IOC.put("enemiesController", enemiesController)
+
         controllers.forEach {
             controllers[it.key] = false
         }
@@ -87,7 +89,7 @@ class PlayerState : IState {
         powerUpsController.update()
         tower.update()
         bgm.update()
-        bgm.updateLayers(playersCount = players.size, bossesCount = bossesCount) // TODO: use actual values
+        bgm.updateLayers(playersCount = players.size, bossesCount = bossesCount)
 
         checkGameOver()
         checkRestart()

@@ -24,7 +24,6 @@ class TitleScreenState : IState {
 
     override fun onActivate() {
         currentTime = 0f
-        IOC.put("showTutorial", true)
     }
 
     override fun onUpdate() {
@@ -33,16 +32,27 @@ class TitleScreenState : IState {
             b.draw(am.texture(Assets.Names.TITLE), 0f, 0f)
         }
 
+        var startPressed = false
         for (controller in controllers) {
-            if (controller.key.isStartPressed()) {
-                IOC.put("state", States.PLAYER_SCREEN)
+            if (controller.key.isStartJustPressed()) {
+                startPressed = true
             }
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) ||
-            Gdx.input.isKeyPressed(Input.Keys.ENTER) ||
-            Gdx.input.isKeyPressed(Input.Keys.P)
-        ) {
-            IOC.put("state", States.PLAYER_SCREEN)
+//        if (!startPressed) {
+//            if (Gdx.input.isKeyPressed(Input.Keys.SPACE) ||
+//                Gdx.input.isKeyPressed(Input.Keys.ENTER) ||
+//                Gdx.input.isKeyPressed(Input.Keys.P)
+//            ) {
+//                startPressed = true
+//            }
+//        }
+
+        if (startPressed) {
+            if (IOC.atOrFail("showTutorial")) {
+                IOC.put("state", States.TUTORIAL_SCREEN)
+            } else {
+                IOC.put("state", States.PLAYER_SCREEN)
+            }
         }
     }
 

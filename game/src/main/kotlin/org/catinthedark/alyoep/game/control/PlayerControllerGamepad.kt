@@ -4,7 +4,7 @@ import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.math.Vector2
 import kotlin.math.abs
 
-class PlayerControllerGamepad(private val controller: Controller) : PlayerController {
+class PlayerControllerGamepad(private val controller: Controller) : PlayerController() {
     private val threshHold = 0.1f
     override fun isStartPressed(): Boolean {
         return controller.getButton(controller.mapping.buttonA)
