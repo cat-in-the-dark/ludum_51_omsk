@@ -46,8 +46,8 @@ class EnemyGenerator(
 
             val bossSpeed = 10f + waveNumber
 
-            val minDamage = waveNumber * 0.5f
-            val maxDamage = waveNumber.toFloat()
+            val minDamage = 0.5f
+            val maxDamage = 1.0f
 
             for (i in 0 until count) {
                 val size = MathUtils.map(0f, 1f, minSize, maxSize, MathUtils.random())
@@ -63,7 +63,7 @@ class EnemyGenerator(
                     val size = bossSize
                     val hp = bossHp
                     val speed = bossSpeed
-                    val damage = MathUtils.map(0f, 1f, minDamage, maxDamage, MathUtils.random())
+                    val damage = 2 * MathUtils.map(0f, 1f, minDamage, maxDamage, MathUtils.random())
                     spawnEnemy(size, hp, speed, damage, true)
                 }
             }

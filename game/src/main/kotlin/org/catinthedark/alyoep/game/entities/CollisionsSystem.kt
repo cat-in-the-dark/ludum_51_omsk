@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2
 import org.catinthedark.alyoep.game.entities.powerups.PowerUp
 import org.catinthedark.alyoep.lib.IOC
 import org.catinthedark.alyoep.lib.atOrFail
+import org.slf4j.LoggerFactory
 import kotlin.math.pow
 
 fun intersectCircles(center1: Vector2, radius1: Float, center2: Vector2, radius2: Float): Boolean {
@@ -51,7 +52,8 @@ fun intersectTriangleCircle(p1: Vector2, p2: Vector2, p3: Vector2, center: Vecto
 }
 
 class CollisionsSystem {
-    fun update() {
+    private val logger = LoggerFactory.getLogger(javaClass)
+    fun update(playersIndex: HashMap<Player, Int>) {
         val enemies: MutableList<SimpleEnemy> = IOC.atOrFail("enemies")
         val players: MutableList<Player> = IOC.atOrFail("players")
         val bullets: MutableList<Bullet> = IOC.atOrFail("bullets")
@@ -71,6 +73,7 @@ class CollisionsSystem {
 
         enemies.forEach { enemy ->
             players.forEach { player ->
+                val playerIdx = playersIndex.getValue(player)
                 if (intersectCircles(
                         enemy.pos,
                         enemy.radius,
@@ -78,7 +81,7 @@ class CollisionsSystem {
                         player.exradius
                     )
                 ) {
-                    onHitPlayerEnemy(player, enemy)
+                    onHitPlayerEnemy(player, playerIdx, enemy)
                 }
 
                 player.nova?.apply {
@@ -102,17 +105,25 @@ class CollisionsSystem {
                 }
             }
 
-            if (intersectTriangleCircle(tower.p1, tower.p2, tower.p3, enemy.center, enemy.radius)) {
-                enemy.tryHit {
+            if (
+                tower.currentHP >= 0.0f &&
+                intersectTriangleCircle(tower.p1, tower.p2, tower.p3, enemy.center, enemy.radius)
+            ) {
+                enemy.tryHitTower {
                     tower.hit(enemy.damage)
+                    logger.info("tow damage: ${enemy.damage} -> ${tower.currentHP}")
                 }
             }
         }
     }
 
-    private fun onHitPlayerEnemy(player: Player, enemy: SimpleEnemy) {
-        enemy.tryHit {
+    private fun onHitPlayerEnemy(player: Player, playerIdx: Int, enemy: SimpleEnemy) {
+        if (player.currentHP <= 0) {
+            return
+        }
+        enemy.tryHitPlayer(playerIdx) {
             player.hit(enemy.damage)
+            logger.info("pl damage: ${enemy.damage} -> ${player.currentHP}")
         }
     }
 }

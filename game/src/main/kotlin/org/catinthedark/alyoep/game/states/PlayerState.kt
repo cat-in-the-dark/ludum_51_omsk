@@ -66,7 +66,12 @@ class PlayerState : IState {
             }
         }
 
-        collisionsSystem.update()
+        val playersIndex = players.foldIndexed(HashMap<Player, Int>()) { idx, map, player ->
+            map.apply {
+                put(player, idx)
+            }
+        }
+        collisionsSystem.update(playersIndex)
         garbageCollectorSystem.update()
 
         players.forEachIndexed { idx, player ->

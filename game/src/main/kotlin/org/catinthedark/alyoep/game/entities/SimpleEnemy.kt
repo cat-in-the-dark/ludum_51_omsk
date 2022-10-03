@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.MathUtils.sin
 import com.badlogic.gdx.math.Vector2
+import org.catinthedark.alyoep.audio.Bgm
 import org.catinthedark.alyoep.lib.CoolDown
 import org.catinthedark.alyoep.lib.IOC
 import org.catinthedark.alyoep.lib.atOrFail
@@ -31,6 +32,7 @@ class SimpleEnemy(
     private val renderer: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
     private val initialDir = randomDir()
     private val hitCooldown = CoolDown(hitCooldownTime)
+    private val bgm: Bgm by lazy { IOC.atOrFail("bgm") }
 
     private var drawDamage = false
     private var drawDamageTime = 0f
@@ -100,7 +102,11 @@ class SimpleEnemy(
         }
     }
 
-    fun tryHit(func: () -> Unit) {
-        hitCooldown.invoke { func() }
+    fun tryHitPlayer(playerIdx: Int, func: () -> Unit) {
+        bgm.playerHits.tryShootIf(playerIdx, 3, func)
+    }
+
+    fun tryHitTower(func: () -> Unit) {
+        bgm.towerHits.tryShootIf(0, 3, func)
     }
 }

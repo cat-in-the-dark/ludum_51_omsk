@@ -29,17 +29,29 @@ object Assets {
     enum class Sounds(val path: String) {
         POWERUP("sounds/powerup.wav"),
         HEAL("sounds/heal.wav"),
+
         SHOOT_01("sounds/1_sh.wav"),
         SHOOT_02("sounds/2_sh.wav"),
         SHOOT_03("sounds/3_sh.wav"),
         SHOOT_04("sounds/4_sh.wav"),
         SHOOT_05("sounds/5_sh.wav"),
         SHOOT_06("sounds/6_sh.wav"),
+
         NOVA_01("sounds/nova/1_SID.wav"),
         NOVA_02("sounds/nova/2_SID.wav"),
         NOVA_03("sounds/nova/3_SID.wav"),
         NOVA_04("sounds/nova/4_SID.wav"),
         NOVA_05("sounds/nova/5_SID.wav"),
+
+        HIT_01("sounds/hits/hit_1.wav"),
+        HIT_02("sounds/hits/hit_2.wav"),
+        HIT_03("sounds/hits/hit_3.wav"),
+        HIT_04("sounds/hits/hit_4.wav"),
+
+        TOWER_HIT_01("sounds/hits/Explosion (1).wav"),
+        TOWER_HIT_02("sounds/hits/Explosion (2).wav"),
+        TOWER_HIT_03("sounds/hits/Explosion (3).wav"),
+        TOWER_HIT_04("sounds/hits/Explosion (4).wav"),
     }
 
     enum class Music(val path: String) {

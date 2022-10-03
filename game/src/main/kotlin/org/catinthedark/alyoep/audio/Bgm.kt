@@ -28,6 +28,30 @@ class Bgm(
         )
     )
 
+    val playerHits = Shooter(
+        am,
+        slotsCount = 4,
+        beatsPerSlotter = 2,
+        slotToShoot = listOf(
+            Assets.Sounds.HIT_01,
+            Assets.Sounds.HIT_02,
+            Assets.Sounds.HIT_03,
+            Assets.Sounds.HIT_04,
+        )
+    )
+
+    val towerHits = Shooter(
+        am,
+        slotsCount = 4,
+        beatsPerSlotter = 2,
+        slotToShoot = listOf(
+            Assets.Sounds.TOWER_HIT_01,
+            Assets.Sounds.TOWER_HIT_02,
+            Assets.Sounds.TOWER_HIT_03,
+            Assets.Sounds.TOWER_HIT_04,
+        )
+    )
+
     val novas = Shooter(
         am,
         slotsCount = 16,
