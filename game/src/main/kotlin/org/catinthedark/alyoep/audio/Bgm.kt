@@ -53,13 +53,23 @@ class Bgm(
                 isLooping = true
             }
         }
-        Assets.Music.values().forEach {
+        resyncMusic()
+        am.at(Assets.Music.BASS).setOnCompletionListener {
+            resyncMusic()
+        }
+    }
+
+    private fun resyncMusic() {
+        // TODO resync on window resize!
+
+        Assets.Music.values().asSequence().forEach {
             am.at(it).apply {
                 play()
-                position = am.at(Assets.Music.values()[0]).position
+                position = am.at(Assets.Music.BASS).position
             }
         }
     }
+
 
     fun update(dt: Float = Gdx.graphics.deltaTime) = Assets.Music.values().forEach {
         am.at(it).apply {
