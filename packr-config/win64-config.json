@@ -1,0 +1,15 @@
+{
+    "platform": "windows64",
+    "jdk": "OpenJDK11U-jre_x64_windows_hotspot_11.0.16.1_1.zip",
+    "executable": "LD51_ALYOEP",
+    "classpath": [
+        "desktop-all.jar"
+    ],
+    "mainclass": "org.catinthedark.alyoep.desktop.DesktopLauncher",
+    "vmargs": [
+       "Xmx1G"
+    ],
+    "resources": [],
+    "minimizejre": "soft",
+    "output": "LD51_ALYOEP"
+}
