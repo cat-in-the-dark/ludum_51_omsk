@@ -15,6 +15,7 @@ import org.catinthedark.alyoep.game.entities.*
 import org.catinthedark.alyoep.game.entities.powerups.FirePowerUp
 import org.catinthedark.alyoep.game.entities.powerups.HealPowerUp
 import org.catinthedark.alyoep.game.entities.powerups.NovaPowerUp
+import org.catinthedark.alyoep.game.states.TutorialState.DrawHelpers.drawButton
 import org.catinthedark.alyoep.lib.*
 import org.catinthedark.alyoep.lib.interfaces.ITransform
 import org.catinthedark.alyoep.lib.math.randomDir
@@ -33,6 +34,76 @@ class TutorialState : IState {
         const val SPACE_WIDTH = 250f
         const val ARROW_WIDTH = 80f
         const val ARROW_DX = 20f
+    }
+
+    object DrawHelpers {
+        fun drawSpaceBar(renderer: ShapeRenderer, pos: Vector2) {
+            val spaceSymWidth = 200f
+            val spaceSymPos =
+                pos.cpy().add((Dimensions.SPACE_WIDTH - spaceSymWidth) / 2, -10f)
+            renderer.roundedRectLine(
+                pos.x,
+                pos.y,
+                Dimensions.SPACE_WIDTH,
+                Dimensions.BUTTON_SIZE,
+                Dimensions.BUTTON_RADIUS
+            )
+            renderer.roundedRectLineShadow(
+                pos.x,
+                pos.y + 10,
+                Dimensions.SPACE_WIDTH,
+                Dimensions.BUTTON_SIZE,
+                Dimensions.BUTTON_RADIUS
+            )
+            renderer.roundedRectLineShadow(
+                spaceSymPos.x,
+                spaceSymPos.y,
+                spaceSymWidth,
+                Dimensions.BUTTON_SIZE,
+                10f
+            )
+        }
+
+        private fun drawArrow(renderer: ShapeRenderer, pos: Vector2, width: Float, height: Float) {
+            val rp1 = pos.cpy()
+            val rp2 = pos.cpy().add(width, 0f)
+            val rp3 = pos.cpy().add(width, height)
+            val rp4 = pos.cpy().add(0f, height)
+            val triangleCenter = Vector2(pos.x + width + height / 2, pos.y + height / 2)
+            val radius = Vector2(height, 0f)
+            val p1 = triangleCenter.cpy().add(radius.cpy())
+            val p2 = triangleCenter.cpy().add(radius.cpy().rotateDeg(120f))
+            val p3 = triangleCenter.cpy().add(radius.cpy().rotateDeg(240f))
+            renderer.polygon2(rp1, rp2, p3, p1, p2, rp3, rp4)
+        }
+
+        fun animateArrow(time: Float, renderer: ShapeRenderer, pos: Vector2, width: Float, height: Float) {
+            val dx = MathUtils.map(-1f, 1f, 0f, Dimensions.ARROW_DX, sin(time * 10))
+            pos.add(dx, 0f)
+            drawArrow(renderer, pos, width, height)
+        }
+
+        fun drawButton(renderer: ShapeRenderer, pos: Vector2, pressed: Boolean) {
+            val offset = if (pressed) {
+                Dimensions.BUTTON_HEIGHT_PRESSED
+            } else {
+                Dimensions.BUTTON_HEIGHT_RELEASED
+            }
+            renderer.roundedRectLine(
+                pos.x,
+                pos.y - offset,
+                Dimensions.BUTTON_SIZE,
+                Dimensions.BUTTON_SIZE,
+                Dimensions.BUTTON_RADIUS
+            )
+            renderer.roundedRectLineShadow(
+                pos.x,
+                pos.y,
+                Dimensions.BUTTON_SIZE,
+                Dimensions.BUTTON_SIZE,
+                Dimensions.BUTTON_RADIUS
+            )
+        }
     }
 
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -54,7 +125,7 @@ class TutorialState : IState {
     private val pickupBarrier = OnceBarrier(1.5f)
     private val moveBackBarrier = OnceBarrier(2.5f)
     private val showNextBarrier = AfterBarrier(5f)
-    private val forceNextBarrier = OnceBarrier(10f)
+    private val forceNextBarrier = OnceBarrier(8f)
 
     private val inputBarrier = RepeatBarrier(0f, 1f)
 
@@ -160,41 +231,6 @@ class TutorialState : IState {
         drawTutorialUi()
     }
 
-    private fun drawButton(renderer: ShapeRenderer, pos: Vector2, pressed: Boolean) {
-        val offset = if (pressed) {
-            Dimensions.BUTTON_HEIGHT_PRESSED
-        } else {
-            Dimensions.BUTTON_HEIGHT_RELEASED
-        }
-        renderer.roundedRectLine(
-            pos.x,
-            pos.y - offset,
-            Dimensions.BUTTON_SIZE,
-            Dimensions.BUTTON_SIZE,
-            Dimensions.BUTTON_RADIUS
-        )
-        renderer.roundedRectLineShadow(
-            pos.x,
-            pos.y,
-            Dimensions.BUTTON_SIZE,
-            Dimensions.BUTTON_SIZE,
-            Dimensions.BUTTON_RADIUS
-        )
-    }
-
-    private fun drawArrow(renderer: ShapeRenderer, pos: Vector2, width: Float, height: Float) {
-        val rp1 = pos.cpy()
-        val rp2 = pos.cpy().add(width, 0f)
-        val rp3 = pos.cpy().add(width, height)
-        val rp4 = pos.cpy().add(0f, height)
-        val triangleCenter = Vector2(pos.x + width + height / 2, pos.y + height / 2)
-        val radius = Vector2(height, 0f)
-        val p1 = triangleCenter.cpy().add(radius.cpy())
-        val p2 = triangleCenter.cpy().add(radius.cpy().rotateDeg(120f))
-        val p3 = triangleCenter.cpy().add(radius.cpy().rotateDeg(240f))
-        render.polygon2(rp1, rp2, p3, p1, p2, rp3, rp4)
-    }
-
     private fun drawTutorialUi() {
         // border
         render.managed(ShapeRenderer.ShapeType.Filled) {
@@ -241,12 +277,11 @@ class TutorialState : IState {
                         stagePos.x + Dimensions.stage.x / 2 - (Dimensions.SPACE_WIDTH + Dimensions.ARROW_WIDTH + 2 * Dimensions.BUTTON_SPACING) / 2,
                         stagePos.y + Dimensions.stage.y + 3 * Dimensions.BUTTON_SPACING
                     )
-                    drawSpaceBar(it, spacePos)
+                    DrawHelpers.drawSpaceBar(it, spacePos)
 
                     val arrowPos = spacePos.cpy().add(Dimensions.SPACE_WIDTH + 2 * Dimensions.BUTTON_SPACING, 15f)
-                    val dx = MathUtils.map(-1f, 1f, 0f, Dimensions.ARROW_DX, sin(time * 10))
-                    arrowPos.add(dx, 0f)
-                    drawArrow(
+                    DrawHelpers.animateArrow(
+                        time,
                         it,
                         arrowPos,
                         Dimensions.ARROW_WIDTH,
@@ -271,27 +306,6 @@ class TutorialState : IState {
                 it.circle(pos.x + 40 * i, pos.y, radius)
             }
         }
-    }
-
-    private fun drawSpaceBar(renderer: ShapeRenderer, pos: Vector2) {
-        val spaceSymWidth = 200f
-        val spaceSymPos =
-            pos.cpy().add((Dimensions.SPACE_WIDTH - spaceSymWidth) / 2, -10f)
-        renderer.roundedRectLine(pos.x, pos.y, Dimensions.SPACE_WIDTH, Dimensions.BUTTON_SIZE, Dimensions.BUTTON_RADIUS)
-        renderer.roundedRectLineShadow(
-            pos.x,
-            pos.y + 10,
-            Dimensions.SPACE_WIDTH,
-            Dimensions.BUTTON_SIZE,
-            Dimensions.BUTTON_RADIUS
-        )
-        renderer.roundedRectLineShadow(
-            spaceSymPos.x,
-            spaceSymPos.y,
-            spaceSymWidth,
-            Dimensions.BUTTON_SIZE,
-            10f
-        )
     }
 
     private fun drawButtons(renderer: ShapeRenderer, pos: Vector2) {

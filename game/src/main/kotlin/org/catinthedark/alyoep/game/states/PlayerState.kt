@@ -3,6 +3,8 @@ package org.catinthedark.alyoep.game.states
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.alyoep.audio.Bgm
 import org.catinthedark.alyoep.game.Const
@@ -10,10 +12,7 @@ import org.catinthedark.alyoep.game.Const.Balance.PLAYER_SPAWN_POINT
 import org.catinthedark.alyoep.game.States
 import org.catinthedark.alyoep.game.control.PlayerController
 import org.catinthedark.alyoep.game.entities.*
-import org.catinthedark.alyoep.lib.IOC
-import org.catinthedark.alyoep.lib.at
-import org.catinthedark.alyoep.lib.atOrFail
-import org.catinthedark.alyoep.lib.atOrPut
+import org.catinthedark.alyoep.lib.*
 import org.catinthedark.alyoep.lib.math.randomDir
 import org.catinthedark.alyoep.lib.states.IState
 import org.slf4j.LoggerFactory
@@ -34,6 +33,10 @@ class PlayerState : IState {
     private val bgm: Bgm by lazy { IOC.atOrFail("bgm") }
     private lateinit var powerUpsGenerator: PowerUpsGenerator
     private lateinit var tower: Tower
+    private val render: ShapeRenderer = IOC.atOrFail("shapeRenderer")
+
+    private val showHintBarrier = AfterBarrier(3f)
+    private var hintTime = 0f
 
     private var activePlayers = 0
 
@@ -41,6 +44,8 @@ class PlayerState : IState {
         get() = enemies.count { it.isBoss }
 
     override fun onActivate() {
+        showHintBarrier.reset()
+        hintTime = 0f
         powerUpsGenerator = PowerUpsGenerator()
         tower = Tower(Vector2(Const.Screen.WIDTH / 2f, Const.Screen.HEIGHT / 3f * 2f))
         IOC.put("tower", tower)
@@ -59,6 +64,8 @@ class PlayerState : IState {
     }
 
     override fun onUpdate() {
+        hintTime += Gdx.graphics.deltaTime
+
         controllers.forEach {
             if (activePlayers < 4 && !it.value && it.key.getDirection().len() > 0.0001) {
                 players.add(Player(PLAYER_SPAWN_POINT.cpy(), colors[activePlayers], it.key))
@@ -91,8 +98,51 @@ class PlayerState : IState {
         bgm.update()
         bgm.updateLayers(playersCount = players.size, bossesCount = bossesCount)
 
+        showHintBarrier.invoke {
+            if (activePlayers == 0) {
+                val space = TutorialState.Dimensions.BUTTON_SIZE + TutorialState.Dimensions.BUTTON_SPACING
+                drawHint(
+                    Vector2(
+                        Const.Screen.WIDTH - space * 3,
+                        Const.Screen.HEIGHT - space * 2
+                    ), MathUtils.floor(hintTime * 2) % 2 == 0
+                )
+            }
+        }
+
         checkGameOver()
         checkRestart()
+    }
+
+    private fun drawHint(pos: Vector2, state: Boolean) {
+        render.managed(ShapeRenderer.ShapeType.Line) {
+            it.color = Color.WHITE
+            val upOffset = Vector2(
+                TutorialState.Dimensions.BUTTON_SIZE + TutorialState.Dimensions.BUTTON_SPACING,
+                0f
+            )
+
+            TutorialState.DrawHelpers.drawButton(it, pos.cpy().add(upOffset), false)
+
+            val leftOffset = Vector2(
+                0f,
+                TutorialState.Dimensions.BUTTON_SIZE + TutorialState.Dimensions.BUTTON_SPACING
+            )
+            TutorialState.DrawHelpers.drawButton(it, pos.cpy().add(leftOffset), state)
+
+            val downOffset = Vector2(
+                TutorialState.Dimensions.BUTTON_SIZE + TutorialState.Dimensions.BUTTON_SPACING,
+                TutorialState.Dimensions.BUTTON_SIZE + TutorialState.Dimensions.BUTTON_SPACING,
+            )
+            TutorialState.DrawHelpers.drawButton(it, pos.cpy().add(downOffset), false)
+
+            val rightOffset = Vector2(
+                2 * (TutorialState.Dimensions.BUTTON_SIZE + TutorialState.Dimensions.BUTTON_SPACING),
+                TutorialState.Dimensions.BUTTON_SIZE + TutorialState.Dimensions.BUTTON_SPACING,
+            )
+
+            TutorialState.DrawHelpers.drawButton(it, pos.cpy().add(rightOffset), false)
+        }
     }
 
     override fun onExit() {
