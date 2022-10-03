@@ -13,6 +13,10 @@ class PowerUpsController {
         powerUps.add(powerUp)
     }
 
+    fun reset() {
+        powerUps.clear()
+    }
+
     fun update() {
         powerUps.forEach {
             it.update()

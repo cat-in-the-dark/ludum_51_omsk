@@ -31,7 +31,7 @@ class PlayerState : IState {
     private val collisionsSystem = CollisionsSystem()
     private val garbageCollectorSystem = GarbageCollectorSystem()
     private val bgm: Bgm by lazy { IOC.atOrFail("bgm") }
-    private val powerUpsGenerator = PowerUpsGenerator()
+    private lateinit var powerUpsGenerator: PowerUpsGenerator
     private lateinit var tower: Tower
 
     private var activePlayers = 0
@@ -42,6 +42,7 @@ class PlayerState : IState {
     override fun onActivate() {
         logger.info("here!")
 
+        powerUpsGenerator = PowerUpsGenerator()
         tower = Tower(Vector2(Const.Screen.WIDTH / 2f, Const.Screen.HEIGHT / 3f * 2f))
         IOC.put("tower", tower)
         controllers.forEach {
@@ -52,6 +53,7 @@ class PlayerState : IState {
         players.clear()
         enemies.clear()
         enemyGenerators.clear()
+        powerUpsController.reset()
     }
 
     override fun onUpdate() {
