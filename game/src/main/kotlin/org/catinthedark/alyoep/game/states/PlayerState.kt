@@ -40,8 +40,8 @@ class PlayerState : IState {
 
     private var activePlayers = 0
 
-    private val bossesCount: Int
-        get() = enemies.count { it.isBoss }
+    private val maxBossness: Int
+        get() = enemies.maxOfOrNull { it.bossness } ?: 0
 
     override fun onActivate() {
         showHintBarrier.reset()
@@ -91,12 +91,12 @@ class PlayerState : IState {
 
         enemiesController.update()
         bullets.forEach { it.update() }
-        enemyGenerators.forEach { it.update() } // TODO: update only for online players
+        enemyGenerators.forEach { it.update(maxBossness) } // TODO: update only for online players
         powerUpsGenerator.update()
         powerUpsController.update()
         tower.update()
         bgm.update()
-        bgm.updateLayers(playersCount = players.size, bossesCount = bossesCount)
+        bgm.updateLayers(playersCount = players.size, maxBossness = maxBossness)
 
         showHintBarrier.invoke {
             if (activePlayers == 0) {

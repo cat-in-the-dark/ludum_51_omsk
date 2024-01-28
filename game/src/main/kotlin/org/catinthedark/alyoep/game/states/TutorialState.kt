@@ -180,11 +180,11 @@ class TutorialState : IState {
         powerUpsController.update()
         enemyBarrier.invoke {
             enemiesController.update()
-            enemyGenerator.update()
+            enemyGenerator.update(currentMaxBossness = 0)
         }
 
         bgm.update()
-        bgm.updateLayers(playersCount = 1, bossesCount = 0)
+        bgm.updateLayers(playersCount = 1, maxBossness = 0)
 
         tryShoot(player, 0)
         tryNova(player, 0)

@@ -3,6 +3,7 @@ package org.catinthedark.alyoep.game.entities.powerups
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.alyoep.audio.Bgm
+import org.catinthedark.alyoep.game.Assets
 import org.catinthedark.alyoep.game.Const.Balance.PowerUp.MAX_FIRE_SPEED
 import org.catinthedark.alyoep.game.entities.Player
 import org.catinthedark.alyoep.lib.IOC
@@ -21,6 +22,6 @@ class FirePowerUp(override var pos: Vector2) : PowerUp(pos, Color.CORAL) {
             player.stats.bulletsCount += 1
         }
 
-        bgm.collectPowerup(false)
+        bgm.collectPowerup()
     }
 }

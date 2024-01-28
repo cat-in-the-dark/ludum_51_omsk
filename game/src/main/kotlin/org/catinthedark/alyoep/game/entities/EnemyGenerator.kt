@@ -30,7 +30,7 @@ class EnemyGenerator(
 
     var demoWaveNumber: Int = 1
 
-    fun update() {
+    fun update(currentMaxBossness: Int = 0) {
         time += Gdx.graphics.deltaTime
         repeater.invoke {
             val fixedTime = time / SIN_TIME_SCALE
@@ -44,7 +44,7 @@ class EnemyGenerator(
             } else {
                 1f
             }
-            val spawn = MathUtils.map(-1f, 1f, minSpawn, maxSpawn, MathUtils.sin(fixedTime))
+            val spawn = MathUtils.map(-1f, 1f, minSpawn, maxSpawn, MathUtils.sin(fixedTime * (1 + 4 * currentMaxBossness)))
 
             val waveNumber = if (demoMode) {
                 demoWaveNumber
@@ -52,13 +52,13 @@ class EnemyGenerator(
                 MathUtils.ceil(fixedTime / MathUtils.PI2)
             }
 
-            val count = MathUtils.round(waveNumber * spawn * MAX_SPAWN)
+            val count = MathUtils.round(waveNumber * spawn * MAX_SPAWN * (1 shl currentMaxBossness))
 
             val minSpeed = 50f
             val maxSpeed = minSpeed + waveNumber * 2f
 
-            val minHp = 0.4f + waveNumber * 0.1f
-            val maxHp = 0.5f + waveNumber * 0.2f
+            val minHp = 0.4f + waveNumber * 0.2f
+            val maxHp = 0.5f + waveNumber * 0.4f
 
             val minSize = 20f
             val maxSize = 30f
@@ -67,6 +67,10 @@ class EnemyGenerator(
             val bossHp = 5f + waveNumber * 5f
 
             val bossSpeed = 10f + waveNumber
+
+            val megaBossSize = 100f
+            val megaBossHp = 45f + waveNumber * 45f
+            val megaBossSpeed = 3f + waveNumber / 3
 
             val minDamage = 0.5f
             val maxDamage = 1.0f
@@ -77,16 +81,16 @@ class EnemyGenerator(
                 val speed = MathUtils.map(maxSize, minSize, minSpeed, maxSpeed, size)
                 val damage = MathUtils.map(minSize, maxSize, minDamage, maxDamage, size)
 
-                spawnEnemy(size, hp, speed, damage, false)
+                spawnEnemy(size, hp, speed, damage, 0)
             }
 
-            if (oldWaveNumber != waveNumber) {
-                if (waveNumber > 3 && waveNumber % 2 == 0) {
-                    val size = bossSize
-                    val hp = bossHp
-                    val speed = bossSpeed
+            if (oldWaveNumber != waveNumber && waveNumber > 3) {
+                if (waveNumber % 9 == 0 || waveNumber > 25 && waveNumber % 5 == 0) {
+                    val damage = 4 * MathUtils.map(0f, 1f, minDamage, maxDamage, MathUtils.random())
+                    spawnEnemy(megaBossSize, megaBossHp, megaBossSpeed, damage, 2)
+                } else if (waveNumber % 2 == 0) {
                     val damage = 2 * MathUtils.map(0f, 1f, minDamage, maxDamage, MathUtils.random())
-                    spawnEnemy(size, hp, speed, damage, true)
+                    spawnEnemy(bossSize, bossHp, bossSpeed, damage, 1)
                 }
             }
 
@@ -100,7 +104,7 @@ class EnemyGenerator(
         }
     }
 
-    fun spawnEnemy(size: Float, hp: Float, speed: Float, damage: Float, isBoss: Boolean) {
+    fun spawnEnemy(size: Float, hp: Float, speed: Float, damage: Float, bossness: Int) {
         val x = bounds.x + Random.nextFloat() * bounds.width
         val y = bounds.y + Random.nextFloat() * bounds.height
 
@@ -110,7 +114,7 @@ class EnemyGenerator(
             damage = damage,
             hitCooldownTime = 0.1f,
             hp = hp,
-            isBoss = isBoss,
+            bossness = bossness,
             speed = Vector2(speed, speed)
         )
         controller.registerEnemy(enemy)

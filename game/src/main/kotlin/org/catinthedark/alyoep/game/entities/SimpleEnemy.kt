@@ -24,7 +24,7 @@ class SimpleEnemy(
     val damage: Float,
     private var hp: Float,
     val speed: Vector2,
-    val isBoss: Boolean,
+    val bossness: Int,
     private val hitCooldownTime: Float
 ) : ITransform, IUpdatable, IDestructible {
     override var shouldDestroy = false
@@ -79,7 +79,11 @@ class SimpleEnemy(
         }
 
         renderer.managed(ShapeRenderer.ShapeType.Line) {
-            it.color = if (!isBoss) Color.WHITE else Color.GOLD
+            it.color = when (bossness) {
+                0 -> Color.WHITE
+                1 -> Color.GOLD
+                else -> Color.DARK_GRAY
+            }
             it.circle(pos.x, pos.y, radius)
         }
 

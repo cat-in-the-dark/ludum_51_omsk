@@ -44,7 +44,7 @@ class Player(
         bulletsCount = 1,
         bulletsFireSpeed = 1,
         maxHP = 16f,
-        bulletDamage = 1.1f,
+        bulletDamage = 2.2f,
     ),
     override var shouldDestroy: Boolean = false,
 ) : ITransform, ICollisionRect, IDestructible {
@@ -72,6 +72,7 @@ class Player(
 
     var nova: Nova? = null
     var healNova: HealNova? = null
+    var nukeNova: NukeNova? = null
 
     val p1: Vector2
         get() = Vector2(pos.x + width / 2, pos.y)
@@ -196,6 +197,13 @@ class Player(
             it.update()
             if (it.shouldDestroy) {
                 healNova = null
+            }
+        }
+
+        nukeNova?.also {
+            it.update()
+            if (it.shouldDestroy) {
+                nukeNova = null
             }
         }
     }

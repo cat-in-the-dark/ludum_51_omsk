@@ -34,7 +34,7 @@ object Const {
             const val TIMEOUT = 1f
             const val BOSS_COOLDOWN = 2f
             const val SIN_TIME_SCALE = 2f
-            const val MAX_SPAWN = 2f
+            const val MAX_SPAWN = 1.1f
         }
 
         object PowerUp {

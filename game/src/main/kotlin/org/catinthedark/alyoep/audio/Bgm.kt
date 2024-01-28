@@ -101,24 +101,24 @@ class Bgm(
         }
     }
 
-    fun updateLayers(bossesCount: Int, playersCount: Int) {
+    fun updateLayers(maxBossness: Int, playersCount: Int) {
         fadeOutAll()
+        fadeOut(Assets.Music.MEGABOSS, DEFAULT_FADE_FORCE / 3)
         if (playersCount <= 0) {
             fadeIn(Assets.Music.LO_TRASH)
         } else {
             fadeIn(Assets.Music.BASS)
-            if (bossesCount > 0) {
+            if (maxBossness > 1) {
+                fadeIn(Assets.Music.MEGABOSS, DEFAULT_FADE_FORCE / 8)
+                fadeOut(Assets.Music.BASS)
+            } else if (maxBossness > 0) {
                 fadeIn(Assets.Music.HI_TRASH)
             }
         }
     }
 
-    fun collectPowerup(isHeal: Boolean) {
-        if (isHeal) {
-            am.at(Assets.Sounds.HEAL).play()
-        } else {
-            am.at(Assets.Sounds.POWERUP).play()
-        }
+    fun collectPowerup(sound: Assets.Sounds = Assets.Sounds.POWERUP) {
+        am.at(sound).play()
     }
 
     fun fadeIn(music: Assets.Music, force: Float = DEFAULT_FADE_FORCE) {

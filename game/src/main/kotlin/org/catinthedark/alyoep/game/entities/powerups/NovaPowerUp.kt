@@ -3,6 +3,7 @@ package org.catinthedark.alyoep.game.entities.powerups
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.alyoep.audio.Bgm
+import org.catinthedark.alyoep.game.Assets
 import org.catinthedark.alyoep.game.Const
 import org.catinthedark.alyoep.game.entities.NovaStats
 import org.catinthedark.alyoep.game.entities.Player
@@ -29,6 +30,6 @@ class NovaPowerUp(override var pos: Vector2) : PowerUp(pos, Color.BLUE) {
             player.stats.nova = NovaStats()
         }
 
-        bgm.collectPowerup(false)
+        bgm.collectPowerup()
     }
 }

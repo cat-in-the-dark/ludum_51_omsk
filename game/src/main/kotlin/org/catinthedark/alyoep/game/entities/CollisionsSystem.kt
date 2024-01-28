@@ -99,6 +99,12 @@ class CollisionsSystem {
                         enemy.damage(stats.novaDmg * Gdx.graphics.deltaTime)
                     }
                 }
+
+                player.nukeNova?.apply {
+                    if (intersectTriangleCircle(p1, p2, p3, enemy.center, enemy.radius)) {
+                        enemy.damage(500f * Gdx.graphics.deltaTime)
+                    }
+                }
             }
 
             bullets.forEach { bullet ->

@@ -3,10 +3,7 @@ package org.catinthedark.alyoep.game.entities
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.alyoep.game.Const
-import org.catinthedark.alyoep.game.entities.powerups.FirePowerUp
-import org.catinthedark.alyoep.game.entities.powerups.HealPowerUp
-import org.catinthedark.alyoep.game.entities.powerups.NovaPowerUp
-import org.catinthedark.alyoep.game.entities.powerups.PowerUp
+import org.catinthedark.alyoep.game.entities.powerups.*
 import org.catinthedark.alyoep.lib.IOC
 import org.catinthedark.alyoep.lib.RepeatBarrier
 import org.catinthedark.alyoep.lib.atOrFail
@@ -17,7 +14,12 @@ class PowerUpsGenerator {
     private val repeater = RepeatBarrier(0f, Const.Balance.PowerUp.TIMEOUT)
     private val controller: PowerUpsController by lazy { IOC.atOrFail("powerUpsController") }
 
-    private val powerUpsPool = listOf("fire", "fire", "fire", "nova", "nova", "heal")
+    private val powerUpsPool = listOf(
+        "fire", "fire", "fire", "fire", "fire", "fire", "fire",
+        "nuke", "nuke",
+        "nova", "nova", "nova", "nova",
+        "heal", "heal", "heal",
+    )
 
     private var time = 0f
     private var round = 0
@@ -27,7 +29,7 @@ class PowerUpsGenerator {
         repeater.invoke {
             val count = players.size
             val pool = if (round < 3) {
-                powerUpsPool.filter { it != "heal" }
+                powerUpsPool.filter { it != "heal" && it != "nuke" }
             } else {
                 powerUpsPool
             }
@@ -56,6 +58,10 @@ class PowerUpsGenerator {
 
             "heal" -> {
                 HealPowerUp(pos)
+            }
+
+            "nuke" -> {
+                NukePowerUp(pos)
             }
 
             else -> {

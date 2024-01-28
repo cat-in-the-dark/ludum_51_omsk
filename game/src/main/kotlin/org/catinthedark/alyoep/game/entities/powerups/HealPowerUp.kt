@@ -3,6 +3,7 @@ package org.catinthedark.alyoep.game.entities.powerups
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import org.catinthedark.alyoep.audio.Bgm
+import org.catinthedark.alyoep.game.Assets
 import org.catinthedark.alyoep.game.Const
 import org.catinthedark.alyoep.game.entities.HealNova
 import org.catinthedark.alyoep.game.entities.Player
@@ -18,7 +19,7 @@ class HealPowerUp(override var pos: Vector2) : PowerUp(pos, Color.LIME) {
     override fun apply(player: Player) {
         tower.currentHP = min(Const.Balance.Tower.MAX_HP, tower.currentHP + Const.Balance.Tower.MAX_HP / 2f)
 
-        bgm.collectPowerup(true)
+        bgm.collectPowerup(Assets.Sounds.HEAL)
 
         player.healNova = HealNova(tower.pos, player.height)
     }

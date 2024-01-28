@@ -29,6 +29,7 @@ object Assets {
     enum class Sounds(val path: String) {
         POWERUP("sounds/powerup.wav"),
         HEAL("sounds/heal.wav"),
+        NUKE("sounds/nuke.wav"),
 
         SHOOT_01("sounds/1_sh.wav"),
         SHOOT_02("sounds/2_sh.wav"),
@@ -59,6 +60,7 @@ object Assets {
         DREAM("music/3_dream.ogg"),
         HI_TRASH("music/2_hi-trash.ogg"),
         LO_TRASH("music/1_lo-trash.ogg"),
+        MEGABOSS("music/megaboss.ogg"),
     }
 }
 
