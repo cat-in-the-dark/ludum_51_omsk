@@ -4,7 +4,7 @@ plugins {
     java
     application
     kotlin("jvm")
-    id("com.github.johnrengelman.shadow") version "5.1.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 repositories {
@@ -13,16 +13,16 @@ repositories {
 }
 
 application {
-    mainClassName = "org.catinthedark.alyoep.desktop.DesktopLauncher"
+    mainClass = "org.catinthedark.alyoep.desktop.DesktopLauncher"
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "11"
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 
@@ -34,8 +34,8 @@ sourceSets {
     }
 }
 
-val gdxVersion = "1.11.0"
-val gdxControllersVersion = "2.2.2"
+val gdxVersion = "1.12.1"
+val gdxControllersVersion = "2.2.3"
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
