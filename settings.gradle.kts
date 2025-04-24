@@ -1,3 +1,3 @@
 rootProject.name = "ALYOEP"
 
-include("game", "desktop")
+include("core", "lwjgl3")

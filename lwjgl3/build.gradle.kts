@@ -29,7 +29,7 @@ java {
 sourceSets {
     main {
         resources {
-            setSrcDirs(listOf("../game/assets"))
+            setSrcDirs(listOf("../assets"))
         }
     }
 }
@@ -45,5 +45,5 @@ dependencies {
     implementation("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop")
     implementation("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop")
 
-    implementation(project(":game"))
+    implementation(project(":core"))
 }

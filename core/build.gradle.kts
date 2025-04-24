@@ -14,7 +14,7 @@ repositories {
 sourceSets {
     main {
         resources {
-            setSrcDirs(listOf("assets"))
+            setSrcDirs(listOf("../assets"))
         }
     }
 }
