@@ -1,5 +1,6 @@
 package org.catinthedark.alyoep.game
 
+import com.badlogic.gdx.Application
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.controllers.Controllers
@@ -19,7 +20,10 @@ import org.catinthedark.alyoep.lib.DefferImpl
 import org.catinthedark.alyoep.lib.IOC
 import org.catinthedark.alyoep.lib.states.StateMachine
 
+
 class MainGame : Game() {
+    
+
     private val stage: Stage by lazy {
         Stage(
             FitViewport(
@@ -69,9 +73,11 @@ class MainGame : Game() {
             Pair(PlayerControllerWasd(), false),
             Pair(PlayerControllerArrowKeys(), false)
         )
-        Controllers.getControllers()?.forEach {
-            Gdx.app.log(this::class.simpleName, "Gamepad: ${it.name} ${it.uniqueId}")
-            controllers[PlayerControllerGamepad(it)] = false
+        if (Gdx.app.type !== Application.ApplicationType.WebGL) {
+            Controllers.getControllers()?.forEach {
+                Gdx.app.log(this::class.simpleName, "Gamepad: ${it.name} ${it.uniqueId}")
+                controllers[PlayerControllerGamepad(it)] = false
+            }
         }
         IOC.put("input", controllers)
     }
