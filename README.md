@@ -35,5 +35,14 @@ Useful Gradle tasks and flags:
 - `teavm:run`: serves the JavaScript application at http://localhost:8080 via a local Jetty server.
 - `test`: runs unit tests (if any).
 
+## Deployment
+- Mac M1 `lwjgl3:packageMacM1`
+- Mac OSX `lwjgl3:packageMacX64`
+- Linux `lwjgl3:packageLinuxX64`
+- Windows `lwjgl3:packageWinX64`
+- Web `teavm:build`
+
+This creates a zip file in lwjgl3/build/construo/dist containing your game and the minimized JRE for the target platform. See this section in the GDX-Liftoff video
+
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
