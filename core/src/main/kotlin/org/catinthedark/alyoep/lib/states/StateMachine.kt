@@ -1,12 +1,10 @@
 package org.catinthedark.alyoep.lib.states
 
+import com.badlogic.gdx.Gdx
 import org.catinthedark.alyoep.lib.IOC
 import org.catinthedark.alyoep.lib.atOr
-import org.slf4j.LoggerFactory
 
 class StateMachine {
-    private val logger = LoggerFactory.getLogger(javaClass)
-
     private val states: MutableMap<String, IState> = hashMapOf()
     private val mixins: MutableMap<String, MutableList<() -> Unit>> = hashMapOf()
     private var currentState: String = ""
@@ -30,13 +28,13 @@ class StateMachine {
     fun onUpdate() {
         val state = IOC.atOr("state", "")
         if (state != currentState) {
-            logger.info("Transition from $currentState to $state")
+            Gdx.app.log(this::class.simpleName, "Transition from $currentState to $state")
             states[currentState]?.onExit()
             states[state]?.onActivate()
             currentState = state
         }
 
-        states[currentState]?.onUpdate() ?: logger.info("Unknown '$state'")
+        states[currentState]?.onUpdate() ?: Gdx.app.log(this::class.simpleName, "Unknown '$state'")
         mixins[currentState]?.forEach { it() }
     }
 }

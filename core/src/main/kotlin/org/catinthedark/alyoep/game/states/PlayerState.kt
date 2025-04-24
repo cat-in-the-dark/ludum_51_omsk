@@ -15,11 +15,8 @@ import org.catinthedark.alyoep.game.entities.*
 import org.catinthedark.alyoep.lib.*
 import org.catinthedark.alyoep.lib.math.randomDir
 import org.catinthedark.alyoep.lib.states.IState
-import org.slf4j.LoggerFactory
 
 class PlayerState : IState {
-    private val logger = LoggerFactory.getLogger(javaClass)
-
     private val colors = listOf(Color.CORAL, Color.CHARTREUSE, Color.GOLDENROD, Color.ROYAL)
     private val controllers: MutableMap<PlayerController, Boolean> by lazy { IOC.atOrFail("input") }
     private lateinit var enemiesController: EnemiesController
@@ -178,7 +175,7 @@ class PlayerState : IState {
 
     private fun tryNova(player: Player, playerId: Int) {
 //        if (Gdx.input.isKeyPressed(Input.Keys.N)) {
-//            logger.info("NOVA CHEAT")
+//            Gdx.app.log(this::class.simpleName, "NOVA CHEAT")
 //            player.nova = Nova(
 //                center = player.center,
 //                radius = player.height,

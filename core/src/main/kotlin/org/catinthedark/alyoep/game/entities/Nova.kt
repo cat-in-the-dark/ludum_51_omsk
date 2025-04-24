@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2
 import org.catinthedark.alyoep.lib.*
 import org.catinthedark.alyoep.lib.interfaces.IDestructible
 import org.catinthedark.alyoep.lib.interfaces.IUpdatable
-import org.slf4j.LoggerFactory
 import kotlin.math.max
 
 class Nova(
@@ -16,7 +15,6 @@ class Nova(
     var radius: Float,
     val stats: NovaStats,
 ) : IUpdatable, IDestructible {
-    private val logger = LoggerFactory.getLogger(javaClass)
     val lifetime = OnceBarrier(stats.novaDuration)
     private val render: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
 

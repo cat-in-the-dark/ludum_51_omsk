@@ -3,7 +3,6 @@ package org.catinthedark.alyoep.audio
 import com.badlogic.gdx.assets.AssetManager
 import org.catinthedark.alyoep.game.Assets
 import org.catinthedark.alyoep.game.at
-import org.slf4j.LoggerFactory
 import kotlin.math.log2
 import kotlin.math.roundToInt
 
@@ -19,8 +18,6 @@ class Shooter(
 ) {
     private val eps = 0.1f / beatsPerSlotter
     private val maxSpeed = 1 + log2(slotsCount.toDouble()).roundToInt()
-
-    private val logger = LoggerFactory.getLogger(javaClass)
 
     private val bulletSlots = HashMap<Int, Int>()
     private var lastSoundedSlot: Int? = null

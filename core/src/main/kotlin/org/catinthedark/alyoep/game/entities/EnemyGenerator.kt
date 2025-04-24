@@ -13,14 +13,12 @@ import org.catinthedark.alyoep.lib.IOC
 import org.catinthedark.alyoep.lib.RepeatBarrier
 import org.catinthedark.alyoep.lib.atOrFail
 import org.catinthedark.alyoep.lib.managed
-import org.slf4j.LoggerFactory
 import kotlin.random.Random
 
 class EnemyGenerator(
     private val bounds: Rectangle,
     private val demoMode: Boolean = false
 ) {
-    private val logger = LoggerFactory.getLogger(javaClass)
     private val renderer: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
     private val repeater = RepeatBarrier(0f, Const.Balance.Spawn.TIMEOUT)
     private val controller: EnemiesController by lazy { IOC.atOrFail("enemiesController") }

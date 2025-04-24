@@ -18,11 +18,8 @@ import org.catinthedark.alyoep.lib.Deffer
 import org.catinthedark.alyoep.lib.DefferImpl
 import org.catinthedark.alyoep.lib.IOC
 import org.catinthedark.alyoep.lib.states.StateMachine
-import org.slf4j.LoggerFactory
 
 class MainGame : Game() {
-    private val logger = LoggerFactory.getLogger(javaClass)
-
     private val stage: Stage by lazy {
         Stage(
             FitViewport(
@@ -73,7 +70,7 @@ class MainGame : Game() {
             Pair(PlayerControllerArrowKeys(), false)
         )
         Controllers.getControllers()?.forEach {
-            logger.info("Gamepad: ${it.name} ${it.uniqueId}")
+            Gdx.app.log(this::class.simpleName, "Gamepad: ${it.name} ${it.uniqueId}")
             controllers[PlayerControllerGamepad(it)] = false
         }
         IOC.put("input", controllers)

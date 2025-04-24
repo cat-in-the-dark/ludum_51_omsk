@@ -17,7 +17,6 @@ import org.catinthedark.alyoep.lib.interfaces.IDestructible
 import org.catinthedark.alyoep.lib.interfaces.ITransform
 import org.catinthedark.alyoep.lib.managed
 import org.catinthedark.alyoep.lib.triangle2
-import org.slf4j.LoggerFactory
 import kotlin.math.max
 import kotlin.math.pow
 
@@ -54,7 +53,6 @@ class Player(
             healAnimationTime = 0f
         }
     var healAnimationTime: Float = 0f
-    private val logger = LoggerFactory.getLogger(javaClass)
     private val render: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
 
     var currentHP: Float = stats.maxHP
@@ -234,10 +232,10 @@ class Player(
     }
 
     fun hit(damage: Float) {
-//        logger.info("HIT dmg=$damage hp=$currentHP")
+//        Gdx.app.log(this::class.simpleName, "HIT dmg=$damage hp=$currentHP")
         currentHP -= damage
         if (currentHP <= 0) {
-//            logger.info("DIED FROM CRINGE")
+//            Gdx.app.log(this::class.simpleName, "DIED FROM CRINGE")
             currentHP = 0f
         }
     }

@@ -11,10 +11,8 @@ import org.catinthedark.alyoep.lib.IOC
 import org.catinthedark.alyoep.lib.atOrFail
 import org.catinthedark.alyoep.lib.managed
 import org.catinthedark.alyoep.lib.states.IState
-import org.slf4j.LoggerFactory
 
 class SplashScreenState : IState {
-    private val logger = LoggerFactory.getLogger(javaClass)
     private val hud: Stage by lazy { IOC.atOrFail<Stage>("hud") }
     private val am: AssetManager by lazy { Assets.load() }
     private val bgm: Bgm by lazy { Bgm(am) }
@@ -31,9 +29,9 @@ class SplashScreenState : IState {
             IOC.put("state", States.TITLE_SCREEN)
             IOC.put("assetManager", am)
             IOC.put("bgm", bgm)
-            logger.info("Assets loaded in $time")
+            Gdx.app.log(this::class.simpleName, "Assets loaded in $time")
         } else {
-            logger.info("Loading assets...${am.progress}")
+            Gdx.app.log(this::class.simpleName, "Loading assets...${am.progress}")
         }
 
         if (am.isLoaded(Assets.Names.LOGO, Texture::class.java)) {

@@ -20,7 +20,6 @@ import org.catinthedark.alyoep.lib.*
 import org.catinthedark.alyoep.lib.interfaces.ITransform
 import org.catinthedark.alyoep.lib.math.randomDir
 import org.catinthedark.alyoep.lib.states.IState
-import org.slf4j.LoggerFactory
 
 class TutorialState : IState {
     object Dimensions {
@@ -105,8 +104,6 @@ class TutorialState : IState {
             )
         }
     }
-
-    private val logger = LoggerFactory.getLogger(javaClass)
 
     private val render: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
     private val controllers: Map<PlayerController, Boolean> = IOC.atOrFail("input")
@@ -445,7 +442,7 @@ class TutorialState : IState {
     }
 
     private fun initStage(stage: Int) {
-        logger.info("init $stage")
+        Gdx.app.log(this::class.simpleName, "init $stage")
         if (stage > 1) {
             player.stats.bulletsCount = 3
             player.stats.bulletsFireSpeed = 2
@@ -458,7 +455,7 @@ class TutorialState : IState {
     }
 
     private fun exitStage(stage: Int) {
-        logger.info("exit $stage")
+        Gdx.app.log(this::class.simpleName, "exit $stage")
         powerUpsController.reset()
         powerUpBarriers.forEach { it.reset() }
         pickupBarrier.reset()

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import org.catinthedark.alyoep.game.Assets
 import org.catinthedark.alyoep.game.at
-import org.slf4j.LoggerFactory
 import kotlin.math.abs
 
 private const val DEFAULT_FADE_FORCE = 0.4f
@@ -64,8 +63,6 @@ class Bgm(
             IntRange(1, 2).map { Assets.Sounds.NOVA_04 },
         ).flatMap { it }.toList()
     )
-
-    private val logger = LoggerFactory.getLogger(javaClass)
 
     private val volumeGains = HashMap<Assets.Music, Float>()
 

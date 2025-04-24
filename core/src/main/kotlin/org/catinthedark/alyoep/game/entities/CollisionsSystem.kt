@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2
 import org.catinthedark.alyoep.game.entities.powerups.PowerUp
 import org.catinthedark.alyoep.lib.IOC
 import org.catinthedark.alyoep.lib.atOrFail
-import org.slf4j.LoggerFactory
 import kotlin.math.min
 import kotlin.math.pow
 
@@ -53,7 +52,6 @@ fun intersectTriangleCircle(p1: Vector2, p2: Vector2, p3: Vector2, center: Vecto
 }
 
 class CollisionsSystem {
-    private val logger = LoggerFactory.getLogger(javaClass)
     fun update(playersIndex: HashMap<Player, Int>) {
         val enemies: MutableList<SimpleEnemy> = IOC.atOrFail("enemies")
         val players: MutableList<Player> = IOC.atOrFail("players")
@@ -127,7 +125,7 @@ class CollisionsSystem {
             ) {
                 enemy.tryHitTower {
                     tower.hit(enemy.damage)
-                    logger.info("tow damage: ${enemy.damage} -> ${tower.currentHP}")
+                    Gdx.app.log(this::class.simpleName, "tow damage: ${enemy.damage} -> ${tower.currentHP}")
                 }
             }
         }
@@ -139,7 +137,7 @@ class CollisionsSystem {
         }
         enemy.tryHitPlayer(playerIdx) {
             player.hit(enemy.damage)
-            logger.info("pl damage: ${enemy.damage} -> ${player.currentHP}")
+            Gdx.app.log(this::class.simpleName, "pl damage: ${enemy.damage} -> ${player.currentHP}")
         }
     }
 }

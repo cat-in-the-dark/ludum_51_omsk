@@ -11,11 +11,9 @@ import org.catinthedark.alyoep.lib.*
 import org.catinthedark.alyoep.lib.interfaces.IDestructible
 import org.catinthedark.alyoep.lib.interfaces.ITransform
 import org.catinthedark.alyoep.lib.interfaces.IUpdatable
-import org.slf4j.LoggerFactory
 
 class Tower(override val pos: Vector2, override var shouldDestroy: Boolean = false) : ITransform, IUpdatable,
     IDestructible {
-    private val logger = LoggerFactory.getLogger(javaClass)
 
     private val render: ShapeRenderer by lazy { IOC.atOrFail("shapeRenderer") }
 

@@ -1,6 +1,6 @@
 package org.catinthedark.alyoep.lib
 
-import org.slf4j.LoggerFactory
+import com.badlogic.gdx.Gdx
 import java.util.concurrent.ConcurrentHashMap
 
 interface Deffer {
@@ -28,8 +28,6 @@ class DefferImpl : Deffer {
     private val funcs: ConcurrentHashMap<Long, Func> = ConcurrentHashMap()
     private var index: Long = 0L
 
-    private val log = LoggerFactory.getLogger(Deffer::class.java)
-
     override fun register(time: Float, func: () -> Unit): Long {
         funcs[index++] = Func(func, time)
         return index
@@ -47,7 +45,7 @@ class DefferImpl : Deffer {
                 try {
                     it.value.func()
                 } catch (e: Exception) {
-                    log.error("Can't call deffer func: ${e.message}", e)
+                    Gdx.app.log(this::class.simpleName, "Can't call deffer func: ${e.message}", e)
                 }
                 funcs.remove(it.key)
             }
